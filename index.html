@@ -217,8 +217,9 @@ function ceremony(){
    $("geo").style.opacity=0;
  });
 
- // La transition administrative ne chevauche plus la musique.
- later(212500,()=>showFinal());
+ // La musique accomplit l'initiation jusqu'à sa dernière note.
+ // Noir bref après la fin, puis l'Ordre officialise l'affectation.
+ later(210900,()=>showFinal());
 }
 function showFinal(){
  const d=divisions[selected];
