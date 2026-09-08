@@ -349,6 +349,106 @@ button:hover{border-color:#aaa}
  #geo.order-field:after{font-size:7px;letter-spacing:.14em;width:82%}
 }
 
+
+/* DEMO — COURONNE DES CINQ
+   Refonte du fond : monumental, monochrome, construit par secteurs.
+   Les emblèmes restent les seules sources de couleur. */
+
+/* Suppression totale des anciennes constructions colorées */
+#geo.order-field .division-layer,
+#geo.order-field .eye,#geo.order-field .flame,#geo.order-field .hand,
+#geo.order-field .spiral,#geo.order-field .hourglass{display:none!important}
+#geo.order-field .field-grid{opacity:.16!important;filter:none!important}
+#geo.order-field .field-grid:before,#geo.order-field .field-grid:after{opacity:.25!important}
+#geo.order-field{width:min(92vmin,900px)!important;height:min(92vmin,900px)!important}
+
+/* Les deux anneaux deviennent la base de la couronne */
+#geo.order-field .field-arc.arc1{
+ width:84%!important;height:84%!important;
+ border:1px solid rgba(238,241,239,.16)!important;
+ opacity:.72!important;
+ box-shadow:0 0 0 14px rgba(238,241,239,.012),0 0 0 28px rgba(238,241,239,.009);
+}
+#geo.order-field .field-arc.arc2{
+ width:70%!important;height:70%!important;
+ border:1px dashed rgba(238,241,239,.10)!important;
+ opacity:.56!important;
+}
+
+/* Centre volontairement vide : cinq pétales/arcs fins, pas de toile d'araignée */
+#geo.order-field .field-core{
+ width:34%!important;height:34%!important;border-radius:50%!important;
+ border:1px solid rgba(238,241,239,.08)!important;
+ background:transparent!important;
+ opacity:.55!important;box-shadow:none!important;
+ transform:translate(-50%,-50%)!important;
+}
+
+/* Cinq secteurs construits par conic-gradient monochrome.
+   Chaque stage révèle 72° supplémentaires de la couronne. */
+#geo.order-field:before{
+ display:block!important;content:""!important;
+ position:absolute!important;left:50%!important;top:50%!important;
+ width:92%!important;height:92%!important;
+ transform:translate(-50%,-50%)!important;
+ border-radius:50%!important;
+ background:conic-gradient(
+   from -36deg,
+   rgba(238,241,239,.26) 0deg,
+   rgba(238,241,239,.06) 2deg,
+   transparent 2.5deg 69deg,
+   rgba(238,241,239,.13) 69.5deg 71.5deg,
+   transparent 72deg 141deg,
+   rgba(238,241,239,.13) 141.5deg 143.5deg,
+   transparent 144deg 213deg,
+   rgba(238,241,239,.13) 213.5deg 215.5deg,
+   transparent 216deg 285deg,
+   rgba(238,241,239,.13) 285.5deg 287.5deg,
+   transparent 288deg 357deg,
+   rgba(238,241,239,.20) 357.5deg 360deg
+ )!important;
+ -webkit-mask:radial-gradient(circle,transparent 0 73%,#000 73.4% 75.2%,transparent 75.6% 80%,#000 80.4% 81.2%,transparent 81.6%);
+ mask:radial-gradient(circle,transparent 0 73%,#000 73.4% 75.2%,transparent 75.6% 80%,#000 80.4% 81.2%,transparent 81.6%);
+ opacity:.34!important;
+ transition:opacity 2s ease,filter 2s ease!important;
+}
+
+/* Anneau de graduations institutionnelles */
+#geo.order-field:after{
+ display:block!important;content:""!important;
+ position:absolute!important;left:50%!important;top:50%!important;
+ width:96%!important;height:96%!important;
+ transform:translate(-50%,-50%)!important;
+ border-radius:50%!important;
+ background:repeating-conic-gradient(from -36deg,rgba(238,241,239,.13) 0 .45deg,transparent .45deg 4deg)!important;
+ -webkit-mask:radial-gradient(circle,transparent 0 84%,#000 84.3% 85%,transparent 85.3%);
+ mask:radial-gradient(circle,transparent 0 84%,#000 84.3% 85%,transparent 85.3%);
+ opacity:.34!important;
+}
+
+/* Révélation progressive : la couronne gagne en présence,
+   mais sans ajouter de traits vers le centre. */
+#geo.order-field.stage1:before{opacity:.40!important;clip-path:polygon(50% 50%,22% 0,78% 0)}
+#geo.order-field.stage2:before{opacity:.46!important;clip-path:polygon(50% 50%,22% 0,100% 18%,100% 68%,50% 50%)}
+#geo.order-field.stage3:before{opacity:.52!important;clip-path:polygon(50% 50%,22% 0,100% 18%,100% 68%,78% 100%,50% 50%)}
+#geo.order-field.stage4:before{opacity:.58!important;clip-path:polygon(50% 50%,22% 0,100% 18%,100% 68%,78% 100%,22% 100%,0 68%,50% 50%)}
+#geo.order-field.stage5:before,#geo.order-field.complete:before{opacity:.72!important;clip-path:none!important;filter:drop-shadow(0 0 12px rgba(255,255,255,.045))}
+
+/* cinq repères d'accueil autour de la couronne, sans couleurs */
+#geo.order-field.stage5 .field-arc.arc1,
+#geo.order-field.complete .field-arc.arc1{
+ border-color:rgba(245,245,245,.26)!important;
+ box-shadow:0 0 0 14px rgba(238,241,239,.018),0 0 0 28px rgba(238,241,239,.012),0 0 26px rgba(255,255,255,.025);
+}
+
+/* On retire le texte technique sous la figure : composition plus noble */
+#geo.order-field.opening-presence:after{content:""!important}
+
+/* Responsive */
+@media(max-width:600px){
+ #geo.order-field{width:105vmin!important;height:105vmin!important}
+}
+
 </style>
 </head>
 <body>
