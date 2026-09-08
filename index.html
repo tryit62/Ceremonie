@@ -497,77 +497,13 @@ button:hover{border-color:#aaa}
 @keyframes coreIn{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}100%{opacity:.45;transform:translate(-50%,-50%) scale(1)}}
 
 
-/* DEMO V1.0 — LA CARTE DES CINQ
-   Fusion A + D + E : constellation -> cinq logiques -> diagramme unique. */
-
-/* On garde le ciel V0.9 mais on supprime totalement la couronne précédente. */
-#geo.order-field .field-grid,#geo.order-field .field-arc,#geo.order-field .field-core,
-#geo.order-field:before,#geo.order-field:after{display:none!important}
-#geo.order-field{width:min(92vmin,920px)!important;height:min(92vmin,920px)!important}
-
-/* Les anciennes couches deviennent cinq fragments cohérents, monochromes. */
-#geo.order-field .division-layer{display:block!important;position:absolute!important;inset:0!important;opacity:0!important;transition:opacity 1.8s ease!important}
-#geo.order-field.stage1 .eye,
-#geo.order-field.stage2 .eye,#geo.order-field.stage2 .flame,
-#geo.order-field.stage3 .eye,#geo.order-field.stage3 .flame,#geo.order-field.stage3 .hand,
-#geo.order-field.stage4 .eye,#geo.order-field.stage4 .flame,#geo.order-field.stage4 .hand,#geo.order-field.stage4 .spiral,
-#geo.order-field.stage5 .division-layer,#geo.order-field.complete .division-layer{opacity:1!important}
-
-/* Tout le diagramme est blanc/gris : seules les Divisions portent leurs couleurs. */
-#geo.order-field .sight,#geo.order-field .route,#geo.order-field .branch{
- height:1px!important;background:linear-gradient(90deg,transparent,rgba(238,241,239,.42),transparent)!important;
- box-shadow:0 0 8px rgba(255,255,255,.035)!important;
+/* V1.1 — FLUX DES CINQ */
+#energyCanvas{
+ position:absolute;inset:0;width:100%;height:100%;
+ pointer-events:none;opacity:0;transition:opacity 1.8s ease;
 }
-#geo.order-field .point{background:rgba(248,249,248,.88)!important;border:0!important;width:4px!important;height:4px!important;border-radius:50%!important;box-shadow:0 0 11px rgba(255,255,255,.28)!important}
-#geo.order-field .trace,#geo.order-field .contain{border-color:rgba(238,241,239,.18)!important}
-
-/* A / ŒIL : une constellation choisit des étoiles et fixe le premier référentiel. */
-#geo.order-field .eye .h1{left:18%!important;top:28%!important;width:64%!important;transform:rotate(-18deg)!important}
-#geo.order-field .eye .h2{left:24%!important;top:51%!important;width:54%!important;transform:rotate(14deg)!important}
-#geo.order-field .eye .v1{left:50%!important;top:18%!important;width:1px!important;height:57%!important;background:linear-gradient(transparent,rgba(238,241,239,.40),transparent)!important}
-#geo.order-field .eye .p1{left:26%!important;top:36%!important}
-#geo.order-field .eye .p2{left:50%!important;top:27%!important}
-#geo.order-field .eye .p3{left:72%!important;top:55%!important}
-
-/* D / FLAMME : la même carte admet une seconde lecture, décalée/inversée. */
-#geo.order-field .flame .r1{left:21%!important;top:62%!important;width:60%!important;transform:rotate(-12deg)!important}
-#geo.order-field .flame .r2{left:28%!important;top:43%!important;width:46%!important;transform:rotate(28deg)!important}
-#geo.order-field .flame .r3{left:31%!important;top:57%!important;width:40%!important;transform:rotate(168deg)!important;opacity:.42!important}
-
-/* D / MAIN : les points deviennent causes/conséquences, sans étoile centrale obligatoire. */
-#geo.order-field .hand .b1{left:34%!important;top:39%!important;width:35%!important;transform:rotate(34deg)!important}
-#geo.order-field .hand .b2{left:46%!important;top:54%!important;width:31%!important;transform:rotate(-37deg)!important}
-#geo.order-field .hand .b3{left:29%!important;top:66%!important;width:39%!important;transform:rotate(-19deg)!important}
-#geo.order-field .hand .b4{left:52%!important;top:31%!important;width:28%!important;transform:rotate(58deg)!important}
-
-/* D / SPIRALE : mémoire des positions précédentes — arcs incomplets, fantômes. */
-#geo.order-field .spiral .t1{width:34%!important;height:34%!important;left:50%!important;top:50%!important;opacity:.30!important;border-style:dashed!important}
-#geo.order-field .spiral .t2{width:52%!important;height:52%!important;left:50%!important;top:50%!important;opacity:.19!important}
-#geo.order-field .spiral .t3{width:70%!important;height:70%!important;left:50%!important;top:50%!important;opacity:.11!important;border-style:dashed!important}
-
-/* D / SABLIER : la limite stabilise la carte, mais n'est pas un gros cercle décoratif. */
-#geo.order-field .hourglass .c1{width:78%!important;height:68%!important;left:50%!important;top:50%!important;border-radius:48% 52% 46% 54%!important;opacity:.28!important}
-#geo.order-field .hourglass .c2{width:68%!important;height:78%!important;left:50%!important;top:50%!important;border-radius:54% 46% 53% 47%!important;opacity:.18!important;border-style:dashed!important}
-#geo.order-field .hourglass .c3{width:58%!important;height:58%!important;left:50%!important;top:50%!important;opacity:.12!important}
-
-/* Chaque fragment est réellement "écrit" à son arrivée. */
-#geo.order-field.stage1 .eye{animation:mapWrite 2.8s ease both}
-#geo.order-field.stage2 .flame{animation:mapWrite 2.8s ease both}
-#geo.order-field.stage3 .hand{animation:mapWrite 2.8s ease both}
-#geo.order-field.stage4 .spiral{animation:memoryBloom 3.2s ease both}
-#geo.order-field.stage5 .hourglass{animation:boundaryClose 3.4s ease both}
-@keyframes mapWrite{0%{opacity:0!important;filter:blur(3px);transform:scale(.94)}100%{opacity:1!important;filter:blur(0);transform:scale(1)}}
-@keyframes memoryBloom{0%{opacity:0!important;transform:scale(.78) rotate(-8deg)}100%{opacity:1!important;transform:scale(1) rotate(0)}}
-@keyframes boundaryClose{0%{opacity:0!important;transform:scale(1.16)}100%{opacity:1!important;transform:scale(1)}}
-
-/* Au cinquième stade, quelques intersections prennent l'aspect d'étoiles capturées. */
-#geo.order-field.stage5{filter:drop-shadow(0 0 8px rgba(255,255,255,.035))}
-#geo.order-field.complete{animation:mapResolve 2.5s ease forwards}
-@keyframes mapResolve{0%{filter:brightness(1)}50%{filter:brightness(1.28)}100%{filter:brightness(1.08)}}
-
-/* Pendant la convergence : la Carte se replie doucement vers le centre,
-   préparant les cercles déjà validés de l'Ordre. */
-#geo.order-field.fold{transform:translate(-50%,-50%) scale(.58)!important;opacity:.14!important;filter:blur(.5px);transition:transform 5s cubic-bezier(.2,.75,.2,1),opacity 4.5s ease!important}
+#energyCanvas.on{opacity:1}
+#geo{display:none!important} /* abandon complet des anciens cercles/cartes */
 
 </style>
 </head>
@@ -576,6 +512,7 @@ button:hover{border-color:#aaa}
 <div id="stage">
  <div id="grain"></div><div id="sweep"></div><div id="sealrings"></div><div id="divisionFinal"><img id="divisionFinalImg" alt=""></div>
  <div id="starfield" aria-hidden="true"></div>
+<canvas id="energyCanvas" aria-hidden="true"></canvas>
 <div class="geometry order-field" id="geo" aria-hidden="true">
  <div class="field-grid"></div>
  <div class="field-arc arc1"></div><div class="field-arc arc2"></div>
@@ -638,6 +575,98 @@ function later(ms,fn){timers.push(setTimeout(fn,ms))}
 function clearTimers(){timers.forEach(clearTimeout);timers=[]}
 function cap(txt,ms=4200){$("caption").textContent=txt;$("caption").classList.add("show");later(ms,()=>$("caption").classList.remove("show"))}
 
+
+const energy={
+ canvas:null,ctx:null,w:0,h:0,dpr:1,active:0,phase:"flow",start:0,raf:0,
+ colors:["#cfe9ff","#ff5d42","#ffd45e","#83d59a","#a978e8"],
+ resize(){
+   this.dpr=Math.min(window.devicePixelRatio||1,2);
+   this.w=innerWidth;this.h=innerHeight;
+   this.canvas.width=this.w*this.dpr;this.canvas.height=this.h*this.dpr;
+   this.canvas.style.width=this.w+"px";this.canvas.style.height=this.h+"px";
+   this.ctx.setTransform(this.dpr,0,0,this.dpr,0,0);
+ },
+ init(){
+   this.canvas=document.getElementById("energyCanvas");this.ctx=this.canvas.getContext("2d");
+   this.resize();window.addEventListener("resize",()=>this.resize());
+   this.start=performance.now();this.loop();
+ },
+ add(i){this.active=Math.max(this.active,i);this.canvas.classList.add("on")},
+ fuse(){this.phase="fuse";this.fuseAt=performance.now()},
+ burst(){this.phase="burst";this.burstAt=performance.now()},
+ clear(){this.active=0;this.phase="flow";this.canvas&&this.canvas.classList.remove("on")},
+ curve(i,t,offset){
+   const ctx=this.ctx,w=this.w,h=this.h,cx=w/2,cy=h/2;
+   const amp=h*(.11+.018*i);
+   const ybase=h*(.30+i*.105);
+   const dir=i%2?1:-1;
+   const drift=Math.sin(t*.00042+i*1.7+offset)*w*.035;
+   ctx.beginPath();
+   for(let x=-40;x<=w+40;x+=18){
+     const u=x/w;
+     let y=ybase
+       +Math.sin(u*Math.PI*2.0+t*.00115*dir+i*.82+offset)*amp
+       +Math.sin(u*Math.PI*4.2-t*.00062+i)*amp*.24;
+     let xx=x+drift*Math.sin(u*Math.PI);
+     if(this.phase==="fuse"){
+       const q=Math.min(1,(performance.now()-this.fuseAt)/5200);
+       const pull=Math.sin(u*Math.PI)*q;
+       xx=xx+(cx-xx)*pull*.68;
+       y=y+(cy-y)*pull*.82;
+     }
+     if(x===-40)ctx.moveTo(xx,y);else ctx.lineTo(xx,y);
+   }
+   ctx.stroke();
+ },
+ loop(){
+   const ctx=this.ctx,t=performance.now();
+   ctx.clearRect(0,0,this.w,this.h);
+   ctx.globalCompositeOperation="lighter";
+   for(let i=0;i<this.active;i++){
+     const col=this.colors[i];
+     for(let k=0;k<4;k++){
+       ctx.save();
+       ctx.strokeStyle=col;
+       ctx.globalAlpha=k===0?.48:(.17-k*.025);
+       ctx.lineWidth=k===0?1.7:4+k*3;
+       ctx.shadowColor=col;ctx.shadowBlur=k===0?13:20;
+       this.curve(i,t,k*.48);
+       ctx.restore();
+     }
+     // traveling sparks riding each flow
+     for(let n=0;n<7;n++){
+       const u=((t*.000055*(1+i*.08)+n/7+i*.13)%1);
+       const x=u*this.w;
+       const amp=this.h*(.11+.018*i), ybase=this.h*(.30+i*.105);
+       const y=ybase+Math.sin(u*Math.PI*2+t*.00115*(i%2?1:-1)+i*.82)*amp;
+       ctx.fillStyle=col;ctx.globalAlpha=.42;
+       ctx.beginPath();ctx.arc(x,y,1.2+(n%3)*.35,0,Math.PI*2);ctx.fill();
+     }
+   }
+   if(this.phase==="burst"){
+     const q=(t-this.burstAt)/1000,cx=this.w/2,cy=this.h/2;
+     if(q<1.3){
+       const a=Math.max(0,1-q/1.3);
+       const g=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(this.w,this.h)*.32*q);
+       g.addColorStop(0,`rgba(255,255,255,${.95*a})`);
+       g.addColorStop(.12,`rgba(255,255,255,${.48*a})`);
+       g.addColorStop(1,"rgba(255,255,255,0)");
+       ctx.fillStyle=g;ctx.fillRect(0,0,this.w,this.h);
+     }
+     for(let r=0;r<4;r++){
+       const age=q-r*.13;
+       if(age>0&&age<2.4){
+         ctx.beginPath();ctx.arc(cx,cy,age*Math.min(this.w,this.h)*.19,0,Math.PI*2);
+         ctx.strokeStyle="rgba(245,247,246,"+(Math.max(0,.65-age*.25))+")";
+         ctx.lineWidth=1.4;ctx.shadowColor="#fff";ctx.shadowBlur=12;ctx.stroke();
+       }
+     }
+   }
+   this.raf=requestAnimationFrame(()=>this.loop());
+ }
+};
+energy.init();
+
 function buildStars(){
  const f=document.getElementById("starfield"); if(!f||f.children.length)return;
  let seed=1705;
@@ -652,7 +681,7 @@ function buildStars(){
 buildStars();
 
 function reset(){
- $("starfield").className="";
+ energy.clear(); $("starfield").className="";
  clearTimers();
  ["s1","s2","s3","s4","s5"].forEach(id=>$(id).className="symbol");
  $("order").className="order";$("order").style.display="";$("divisionFinal").className="";$("divisionFinalImg").src=""; $("geo").style.opacity=0;$("sweep").className="";$("sealrings").className="";$("caption").className="";
@@ -661,7 +690,7 @@ function reset(){
  document.documentElement.style.setProperty("--accent","#d9d4c7");
 }
 function showSymbol(i,text){
- if(i===1){$("starfield").className="out";}
+ if(i===1){$("starfield").className="out";} energy.add(i);
  $("geo").className="geometry order-field stage"+i;
  const el=$("s"+i); el.classList.add("show","awake"); cap(text,3200);
  later(5600,()=>el.classList.add("orbit"));
@@ -687,7 +716,7 @@ function ceremony(){
  later(135000,()=>{$("geo").className="geometry order-field stage5 complete";cap("SÉPARÉES, ELLES SONT CINQ.",4500)});
  later(143000,()=>{
    ["s1","s2","s3","s4","s5"].forEach((id,k)=>later(k*160,()=>$(id).classList.add("converge")));
-   $("sealrings").classList.add("show");$("geo").classList.add("fold");
+   $("sealrings").classList.add("show");
    later(6200,()=>["s1","s2","s3","s4","s5"].forEach(id=>$(id).classList.add("vanish")));
  });
  later(148000,()=>cap("ENSEMBLE… ELLES SONT L'ORDRE.",5200));
@@ -695,7 +724,7 @@ function ceremony(){
  // Partie III : apogée. Plus aucune narration.
  later(151000,()=>{
    $("flash").classList.remove("go"); void $("flash").offsetWidth; $("flash").classList.add("go");
-   $("order").classList.add("show","reveal");$("geo").style.opacity=.14;
+   energy.burst();$("order").classList.add("show","reveal");$("geo").style.opacity=.14;
  });
 
  // L'emblème reste seul pendant tout l'apogée, puis commence sa disparition
