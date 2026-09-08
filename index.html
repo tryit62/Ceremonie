@@ -93,6 +93,14 @@ button:hover{border-color:#aaa}
 #divisionFinal img{width:100%;height:100%;object-fit:contain;filter:none;mix-blend-mode:screen}
 #divisionFinal.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
 #finalPanel{z-index:9}
+
+/* V0.3.3 — fluidité restaurée */
+.symbol{transition:left 5.2s cubic-bezier(.16,.72,.18,1),top 5.2s cubic-bezier(.16,.72,.18,1),transform 5.2s cubic-bezier(.16,.72,.18,1),opacity 2.8s ease!important}
+.symbol.converge{left:50%!important;top:50%!important;transform:translate(-50%,-50%) scale(.52)!important;opacity:.95!important}
+.symbol.vanish,.symbol.softvanish{left:50%!important;top:50%!important;transform:translate(-50%,-50%) scale(.20)!important;opacity:0!important}
+.order{transition:opacity 4.8s ease,transform 5.2s cubic-bezier(.16,.72,.18,1)!important}
+.order.exit,.order.slowexit{opacity:0!important;transform:translate(-50%,-50%) scale(.90)!important}
+#geo{transition:opacity 3.5s ease}
 </style>
 </head>
 <body>
@@ -178,7 +186,7 @@ function ceremony(){
  later(148000,()=>cap("ENSEMBLE… ELLES SONT L'ORDRE.",5200));
  later(151000,()=>{$("flash").classList.remove("go");void $("flash").offsetWidth;$("flash").classList.add("go");$("order").classList.add("show","reveal")});
  later(188000,()=>{$("order").classList.add("exit");$("geo").style.opacity=.12;$("sealrings").className="";});
- later(191000,()=>{$("order").style.display="none";});
+ later(199000,()=>{$("order").style.display="none";$("geo").style.opacity=0;});
 later(194000,()=>showFinal());
 }
 function showFinal(){

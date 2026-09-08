@@ -1,10 +1,8 @@
-D000 — V0.3.2 CORRECTIF
-
-Correction du bug de la V0.3.1 :
-- suppression de l'ancien calque final qui pouvait se superposer ;
-- l'emblème de l'Ordre disparaît réellement avant l'affectation ;
-- un seul emblème est affiché sur l'écran final : celui de la Division attribuée ;
-- les six PNG officiels fournis par l'utilisateur sont conservés ;
-- tous les fichiers restent à la racine pour GitHub Pages.
-
-Remplacer tous les anciens fichiers du dépôt de test par ceux de ce ZIP.
+V0.3.3 — TRANSITIONS FLUIDES
+- PNG officiels couleur inchangés.
+- Chaque emblème glisse lentement vers sa place dans le cercle.
+- Les cinq emblèmes convergent progressivement vers le centre puis s'effacent ensemble.
+- L'emblème de l'Ordre s'éteint lentement.
+- Écran noir volontaire avant matricule / statut / accréditation / division.
+- Pas de superposition finale.
+Tous les fichiers sont à placer à la racine GitHub Pages.
