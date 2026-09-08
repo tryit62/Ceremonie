@@ -140,7 +140,7 @@ button:hover{border-color:#aaa}
     <option value="spirale">SPIRALE D'OS</option>
     <option value="sablier">SABLIER NOIR</option>
    </select>
-   <button id="launch">LANCER LA CÉRÉMONIE</button>
+   <button id="launch">LANCER LA CÉRÉMONIE</button><button type="button" onclick="testAudio()" style="margin-left:10px">TEST SON 5 s</button>
   </div>
  </div>
 </div>
@@ -210,6 +210,15 @@ function restart(){reset();$("intro").style.display="flex";$("testbar").style.di
 function skipToFinal(){reset();$("intro").style.display="none";$("testbar").style.display="flex";showFinal()}
 $("launch").onclick=()=>{selected=$("choice").value;ceremony()};
 
+
+
+function testAudio(){
+ const a=$("theme");
+ a.muted=false;a.volume=1;a.currentTime=0;
+ a.play().then(()=>{
+   setTimeout(()=>{a.pause();a.currentTime=0;},5000);
+ }).catch(e=>alert("Erreur audio : "+e.message));
+}
 
 </script>
 </body></html>
