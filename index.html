@@ -208,312 +208,34 @@ function showFinal(){
 }
 function restart(){reset();$("intro").style.display="flex";$("testbar").style.display="none"}
 function skipToFinal(){reset();$("intro").style.display="none";$("testbar").style.display="flex";showFinal()}
-$("launch").onclick=()=>{selected=$("choice").value;ceremony()};
+$("launch").onclick=()=>{
+  selected=$("choice").value;
 
-
-
-let audioTestTimer=null;
-function testAudio(){
- const a=$("theme");
- if(audioTestTimer){clearTimeout(audioTestTimer);audioTestTimer=null;}
- a.pause();a.currentTime=0;a.muted=false;a.volume=1;
- a.play().then(()=>{
-   audioTestTimer=setTimeout(()=>{a.pause();a.currentTime=0;audioTestTimer=null;},5000);
- }).catch(e=>alert("Erreur audio : "+e.message));
-}
-
-
-function launchWithAudio(ev){
-  if(ev) ev.preventDefault();
+  // Même séquence que TEST SON, qui est confirmée fonctionnelle sur l'appareil.
+  const a=$("theme");
   if(audioTestTimer){clearTimeout(audioTestTimer);audioTestTimer=null;}
-  const a=document.getElementById("theme");
   a.pause();
   a.currentTime=0;
   a.muted=false;
   a.volume=1;
-  const promise=a.play(); // FIRST action in the user gesture
-  start();                // visual ceremony only; does not touch audio
-  if(promise) promise.catch(e=>alert("Lecture cérémonie bloquée : "+e.name+" — "+e.message));
-}
-const launch=document.getElementById("launchCeremony");
-if(launch){
-  launch.addEventListener("click",launchWithAudio,{passive:false});
-}
 
-</script>
-</body></html
- const theme=$("theme");
- theme.muted=false;
- theme.volume=1;
- theme.currentTime=0;
- theme.play().catch(err=>{
-   console.error("AUDIO CEREMONIE:",err);
-   alert("La musique n'a pas pu démarrer : "+err.message);
- });
-
-function later(ms,fn){timers.push(setTimeout(fn,ms))}
-function clearTimers(){timers.forEach(clearTimeout);timers=[]}
-function cap(txt,ms=4200){$("caption").textContent=txt;$("caption").classList.add("show");later(ms,()=>$("caption").classList.remove("show"))}
-function reset(){
- clearTimers();
- ["s1","s2","s3","s4","s5"].forEach(id=>$(id).className="symbol");
- $("order").className="order";$("order").style.display="";$("divisionFinal").className="";$("divisionFinalImg").src=""; $("geo").style.opacity=0;$("sweep").className="";$("sealrings").className="";$("caption").className="";
- $("status").className="";$("finalLogo").className="";$("finalLogo").innerHTML="";
- $("stat").textContent="CANDIDAT";$("acc").textContent="—";$("division").textContent="—";
- document.documentElement.style.setProperty("--accent","#d9d4c7");
-}
-function showSymbol(i,text){
- const el=$("s"+i); el.classList.add("show","awake"); cap(text,3200);
- later(5600,()=>el.classList.add("orbit"));
-}
-function ceremony(){
- reset(); $("intro").style.display="none"; $("testbar").style.display="flex";
- later(2200,()=>{$("geo").style.opacity=.55;$("sweep").classList.add("go")});
- later(8000,()=>cap("DEPUIS QUE L'HOMME OBSERVE LE MONDE, IL CROIT REGARDER LA RÉALITÉ.",6500));
- later(24000,()=>cap("IL N'EN PERÇOIT QU'UNE VERSION.",4500));
- later(39000,()=>cap("DEPUIS DES SIÈCLES, CERTAINS ONT APPRIS À RECONNAÎTRE CE QUE D'AUTRES NE POUVAIENT VOIR.",9000));
- later(60000,()=>showSymbol(1,"CERTAINS ONT OBSERVÉ."));
- later(76000,()=>showSymbol(2,"CERTAINS ONT ADAPTÉ."));
- later(91000,()=>showSymbol(3,"CERTAINS ONT ANTICIPÉ."));
- later(107000,()=>showSymbol(4,"CERTAINS ONT PRÉSERVÉ."));
- later(122000,()=>showSymbol(5,"CERTAINS ONT CONTENU CE QUI NE DEVAIT PAS FRANCHIR LA LIMITE."));
- later(135000,()=>cap("SÉPARÉES, ELLES SONT CINQ.",4500));
- later(143000,()=>{["s1","s2","s3","s4","s5"].forEach((id,k)=>later(k*160,()=>$(id).classList.add("converge")));$("sealrings").classList.add("show");later(6200,()=>["s1","s2","s3","s4","s5"].forEach(id=>$(id).classList.add("vanish")));});
- later(148000,()=>cap("ENSEMBLE… ELLES SONT L'ORDRE.",5200));
- later(151000,()=>{$("flash").classList.remove("go");void $("flash").offsetWidth;$("flash").classList.add("go");$("order").classList.add("show","reveal")});
- later(188000,()=>{$("order").classList.add("exit");$("geo").style.opacity=.12;$("sealrings").className="";});
- later(211500,()=>{$("order").style.display="none";$("geo").style.opacity=0;});
-later(194000,()=>showFinal());
-}
-function showFinal(){
- const d=divisions[selected];
- document.documentElement.style.setProperty("--accent",d.color);
- $("status").classList.add("show");
- later(1800,()=>{$("stat").textContent="INITIÉ"});
- later(3800,()=>{$("acc").textContent="OMBRE I"});
- later(5900,()=>{
-   $("division").textContent=d.name;$("division").style.color=d.color;
-   $("finalLogo").className="";
-   $("finalLogo").innerHTML="";
-   $("divisionFinalImg").src=d.img;
-   $("divisionFinal").classList.add("show");
- });
- later(9000,()=>cap("AUJOURD'HUI, CETTE RESPONSABILITÉ DEVIENT ÉGALEMENT LA VÔTRE.",6500));
- later(17500,()=>cap("BIENVENUE PARMI LES CINQ OMBRES… INITIÉ.",8000));
-}
-function restart(){reset();$("intro").style.display="flex";$("testbar").style.display="none"}
-function skipToFinal(){reset();$("intro").style.display="none";$("testbar").style.display="flex";showFinal()}
-$("launch").onclick=()=>{selected=$("choice").value;ceremony()};
+  const p=a.play();
+  if(p){
+    p.then(()=>ceremony())
+     .catch(e=>alert("Erreur audio au lancement : "+e.name+" — "+e.message));
+  }else{
+    ceremony();
+  }
+};
 
 
 
-let audioTestTimer=null;
 function testAudio(){
  const a=$("theme");
- if(audioTestTimer){clearTimeout(audioTestTimer);audioTestTimer=null;}
- a.pause();a.currentTime=0;a.muted=false;a.volume=1;
+ a.muted=false;a.volume=1;a.currentTime=0;
  a.play().then(()=>{
-   audioTestTimer=setTimeout(()=>{a.pause();a.currentTime=0;audioTestTimer=null;},5000);
+   setTimeout(()=>{a.pause();a.currentTime=0;},5000);
  }).catch(e=>alert("Erreur audio : "+e.message));
-}
-
-
-function launchWithAudio(ev){
-  if(ev) ev.preventDefault();
-  if(audioTestTimer){clearTimeout(audioTestTimer);audioTestTimer=null;}
-  const a=document.getElementById("theme");
-  a.pause();
-  a.currentTime=0;
-  a.muted=false;
-  a.volume=1;
-  const promise=a.play(); // FIRST action in the user gesture
-  start();                // visual ceremony only; does not touch audio
-  if(promise) promise.catch(e=>alert("Lecture cérémonie bloquée : "+e.name+" — "+e.message));
-}
-const launch=document.getElementById("launchCeremony");
-if(launch){
-  launch.addEventListener("click",launchWithAudio,{passive:false});
-}
-
-</script>
-</body></html
-function later(ms,fn){timers.push(setTimeout(fn,ms))}
-function clearTimers(){timers.forEach(clearTimeout);timers=[]}
-function cap(txt,ms=4200){$("caption").textContent=txt;$("caption").classList.add("show");later(ms,()=>$("caption").classList.remove("show"))}
-function reset(){
- clearTimers();
- ["s1","s2","s3","s4","s5"].forEach(id=>$(id).className="symbol");
- $("order").className="order";$("order").style.display="";$("divisionFinal").className="";$("divisionFinalImg").src=""; $("geo").style.opacity=0;$("sweep").className="";$("sealrings").className="";$("caption").className="";
- $("status").className="";$("finalLogo").className="";$("finalLogo").innerHTML="";
- $("stat").textContent="CANDIDAT";$("acc").textContent="—";$("division").textContent="—";
- document.documentElement.style.setProperty("--accent","#d9d4c7");
-}
-function showSymbol(i,text){
- const el=$("s"+i); el.classList.add("show","awake"); cap(text,3200);
- later(5600,()=>el.classList.add("orbit"));
-}
-function ceremony(){
- reset(); $("intro").style.display="none"; $("testbar").style.display="flex";
- later(2200,()=>{$("geo").style.opacity=.55;$("sweep").classList.add("go")});
- later(8000,()=>cap("DEPUIS QUE L'HOMME OBSERVE LE MONDE, IL CROIT REGARDER LA RÉALITÉ.",6500));
- later(24000,()=>cap("IL N'EN PERÇOIT QU'UNE VERSION.",4500));
- later(39000,()=>cap("DEPUIS DES SIÈCLES, CERTAINS ONT APPRIS À RECONNAÎTRE CE QUE D'AUTRES NE POUVAIENT VOIR.",9000));
- later(60000,()=>showSymbol(1,"CERTAINS ONT OBSERVÉ."));
- later(76000,()=>showSymbol(2,"CERTAINS ONT ADAPTÉ."));
- later(91000,()=>showSymbol(3,"CERTAINS ONT ANTICIPÉ."));
- later(107000,()=>showSymbol(4,"CERTAINS ONT PRÉSERVÉ."));
- later(122000,()=>showSymbol(5,"CERTAINS ONT CONTENU CE QUI NE DEVAIT PAS FRANCHIR LA LIMITE."));
- later(135000,()=>cap("SÉPARÉES, ELLES SONT CINQ.",4500));
- later(143000,()=>{["s1","s2","s3","s4","s5"].forEach((id,k)=>later(k*160,()=>$(id).classList.add("converge")));$("sealrings").classList.add("show");later(6200,()=>["s1","s2","s3","s4","s5"].forEach(id=>$(id).classList.add("vanish")));});
- later(148000,()=>cap("ENSEMBLE… ELLES SONT L'ORDRE.",5200));
- later(151000,()=>{$("flash").classList.remove("go");void $("flash").offsetWidth;$("flash").classList.add("go");$("order").classList.add("show","reveal")});
- later(188000,()=>{$("order").classList.add("exit");$("geo").style.opacity=.12;$("sealrings").className="";});
- later(211500,()=>{$("order").style.display="none";$("geo").style.opacity=0;});
-later(194000,()=>showFinal());
-}
-function showFinal(){
- const d=divisions[selected];
- document.documentElement.style.setProperty("--accent",d.color);
- $("status").classList.add("show");
- later(1800,()=>{$("stat").textContent="INITIÉ"});
- later(3800,()=>{$("acc").textContent="OMBRE I"});
- later(5900,()=>{
-   $("division").textContent=d.name;$("division").style.color=d.color;
-   $("finalLogo").className="";
-   $("finalLogo").innerHTML="";
-   $("divisionFinalImg").src=d.img;
-   $("divisionFinal").classList.add("show");
- });
- later(9000,()=>cap("AUJOURD'HUI, CETTE RESPONSABILITÉ DEVIENT ÉGALEMENT LA VÔTRE.",6500));
- later(17500,()=>cap("BIENVENUE PARMI LES CINQ OMBRES… INITIÉ.",8000));
-}
-function restart(){reset();$("intro").style.display="flex";$("testbar").style.display="none"}
-function skipToFinal(){reset();$("intro").style.display="none";$("testbar").style.display="flex";showFinal()}
-$("launch").onclick=()=>{selected=$("choice").value;ceremony()};
-
-
-
-let audioTestTimer=null;
-function testAudio(){
- const a=$("theme");
- if(audioTestTimer){clearTimeout(audioTestTimer);audioTestTimer=null;}
- a.pause();a.currentTime=0;a.muted=false;a.volume=1;
- a.play().then(()=>{
-   audioTestTimer=setTimeout(()=>{a.pause();a.currentTime=0;audioTestTimer=null;},5000);
- }).catch(e=>alert("Erreur audio : "+e.message));
-}
-
-
-function launchWithAudio(ev){
-  if(ev) ev.preventDefault();
-  if(audioTestTimer){clearTimeout(audioTestTimer);audioTestTimer=null;}
-  const a=document.getElementById("theme");
-  a.pause();
-  a.currentTime=0;
-  a.muted=false;
-  a.volume=1;
-  const promise=a.play(); // FIRST action in the user gesture
-  start();                // visual ceremony only; does not touch audio
-  if(promise) promise.catch(e=>alert("Lecture cérémonie bloquée : "+e.name+" — "+e.message));
-}
-const launch=document.getElementById("launchCeremony");
-if(launch){
-  launch.addEventListener("click",launchWithAudio,{passive:false});
-}
-
-</script>
-</body></html
- const theme=$("theme");
- theme.muted=false;
- theme.volume=1;
- theme.currentTime=0;
- theme.play().catch(err=>{
-   console.error("AUDIO CEREMONIE:",err);
-   alert("La musique n'a pas pu démarrer : "+err.message);
- });
-
-function later(ms,fn){timers.push(setTimeout(fn,ms))}
-function clearTimers(){timers.forEach(clearTimeout);timers=[]}
-function cap(txt,ms=4200){$("caption").textContent=txt;$("caption").classList.add("show");later(ms,()=>$("caption").classList.remove("show"))}
-function reset(){
- clearTimers();
- ["s1","s2","s3","s4","s5"].forEach(id=>$(id).className="symbol");
- $("order").className="order";$("order").style.display="";$("divisionFinal").className="";$("divisionFinalImg").src=""; $("geo").style.opacity=0;$("sweep").className="";$("sealrings").className="";$("caption").className="";
- $("status").className="";$("finalLogo").className="";$("finalLogo").innerHTML="";
- $("stat").textContent="CANDIDAT";$("acc").textContent="—";$("division").textContent="—";
- document.documentElement.style.setProperty("--accent","#d9d4c7");
-}
-function showSymbol(i,text){
- const el=$("s"+i); el.classList.add("show","awake"); cap(text,3200);
- later(5600,()=>el.classList.add("orbit"));
-}
-function ceremony(){
- reset(); $("intro").style.display="none"; $("testbar").style.display="flex";
- later(2200,()=>{$("geo").style.opacity=.55;$("sweep").classList.add("go")});
- later(8000,()=>cap("DEPUIS QUE L'HOMME OBSERVE LE MONDE, IL CROIT REGARDER LA RÉALITÉ.",6500));
- later(24000,()=>cap("IL N'EN PERÇOIT QU'UNE VERSION.",4500));
- later(39000,()=>cap("DEPUIS DES SIÈCLES, CERTAINS ONT APPRIS À RECONNAÎTRE CE QUE D'AUTRES NE POUVAIENT VOIR.",9000));
- later(60000,()=>showSymbol(1,"CERTAINS ONT OBSERVÉ."));
- later(76000,()=>showSymbol(2,"CERTAINS ONT ADAPTÉ."));
- later(91000,()=>showSymbol(3,"CERTAINS ONT ANTICIPÉ."));
- later(107000,()=>showSymbol(4,"CERTAINS ONT PRÉSERVÉ."));
- later(122000,()=>showSymbol(5,"CERTAINS ONT CONTENU CE QUI NE DEVAIT PAS FRANCHIR LA LIMITE."));
- later(135000,()=>cap("SÉPARÉES, ELLES SONT CINQ.",4500));
- later(143000,()=>{["s1","s2","s3","s4","s5"].forEach((id,k)=>later(k*160,()=>$(id).classList.add("converge")));$("sealrings").classList.add("show");later(6200,()=>["s1","s2","s3","s4","s5"].forEach(id=>$(id).classList.add("vanish")));});
- later(148000,()=>cap("ENSEMBLE… ELLES SONT L'ORDRE.",5200));
- later(151000,()=>{$("flash").classList.remove("go");void $("flash").offsetWidth;$("flash").classList.add("go");$("order").classList.add("show","reveal")});
- later(188000,()=>{$("order").classList.add("exit");$("geo").style.opacity=.12;$("sealrings").className="";});
- later(211500,()=>{$("order").style.display="none";$("geo").style.opacity=0;});
-later(194000,()=>showFinal());
-}
-function showFinal(){
- const d=divisions[selected];
- document.documentElement.style.setProperty("--accent",d.color);
- $("status").classList.add("show");
- later(1800,()=>{$("stat").textContent="INITIÉ"});
- later(3800,()=>{$("acc").textContent="OMBRE I"});
- later(5900,()=>{
-   $("division").textContent=d.name;$("division").style.color=d.color;
-   $("finalLogo").className="";
-   $("finalLogo").innerHTML="";
-   $("divisionFinalImg").src=d.img;
-   $("divisionFinal").classList.add("show");
- });
- later(9000,()=>cap("AUJOURD'HUI, CETTE RESPONSABILITÉ DEVIENT ÉGALEMENT LA VÔTRE.",6500));
- later(17500,()=>cap("BIENVENUE PARMI LES CINQ OMBRES… INITIÉ.",8000));
-}
-function restart(){reset();$("intro").style.display="flex";$("testbar").style.display="none"}
-function skipToFinal(){reset();$("intro").style.display="none";$("testbar").style.display="flex";showFinal()}
-$("launch").onclick=()=>{selected=$("choice").value;ceremony()};
-
-
-
-let audioTestTimer=null;
-function testAudio(){
- const a=$("theme");
- if(audioTestTimer){clearTimeout(audioTestTimer);audioTestTimer=null;}
- a.pause();a.currentTime=0;a.muted=false;a.volume=1;
- a.play().then(()=>{
-   audioTestTimer=setTimeout(()=>{a.pause();a.currentTime=0;audioTestTimer=null;},5000);
- }).catch(e=>alert("Erreur audio : "+e.message));
-}
-
-
-function launchWithAudio(ev){
-  if(ev) ev.preventDefault();
-  if(audioTestTimer){clearTimeout(audioTestTimer);audioTestTimer=null;}
-  const a=document.getElementById("theme");
-  a.pause();
-  a.currentTime=0;
-  a.muted=false;
-  a.volume=1;
-  const promise=a.play(); // FIRST action in the user gesture
-  start();                // visual ceremony only; does not touch audio
-  if(promise) promise.catch(e=>alert("Lecture cérémonie bloquée : "+e.name+" — "+e.message));
-}
-const launch=document.getElementById("launchCeremony");
-if(launch){
-  launch.addEventListener("click",launchWithAudio,{passive:false});
 }
 
 </script>
