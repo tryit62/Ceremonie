@@ -500,9 +500,9 @@ button:hover{border-color:#aaa}
 /* V1.1 — FLUX DES CINQ */
 #energyCanvas{
  position:absolute;inset:0;width:100%;height:100%;
- pointer-events:none;opacity:0;transition:opacity 1.8s ease;
+ pointer-events:none;opacity:0;transition:opacity 3.2s ease;
 }
-#energyCanvas.on{opacity:1}
+#energyCanvas.on{opacity:.72}
 #geo{display:none!important} /* abandon complet des anciens cercles/cartes */
 
 </style>
@@ -578,7 +578,7 @@ function cap(txt,ms=4200){$("caption").textContent=txt;$("caption").classList.ad
 
 const energy={
  canvas:null,ctx:null,w:0,h:0,dpr:1,active:0,phase:"flow",start:0,raf:0,
- colors:["#cfe9ff","#ff5d42","#ffd45e","#83d59a","#a978e8"],
+ colors:["#cfe9ff","#ff5d42","#ffd45e","#83d59a","#a978e8"],born:[0,0,0,0,0],
  resize(){
    this.dpr=Math.min(window.devicePixelRatio||1,2);
    this.w=innerWidth;this.h=innerHeight;
@@ -591,16 +591,24 @@ const energy={
    this.resize();window.addEventListener("resize",()=>this.resize());
    this.start=performance.now();this.loop();
  },
- add(i){this.active=Math.max(this.active,i);this.canvas.classList.add("on")},
+ add(i){
+   this.active=Math.max(this.active,i);
+   if(!this.born[i-1])this.born[i-1]=performance.now();
+   this.canvas.classList.add("on")
+ },
  fuse(){this.phase="fuse";this.fuseAt=performance.now()},
- burst(){this.phase="burst";this.burstAt=performance.now()},
- clear(){this.active=0;this.phase="flow";this.canvas&&this.canvas.classList.remove("on")},
+ burst(){
+   this.phase="burst";this.burstAt=performance.now();
+   this.active=0;
+   this.canvas.classList.remove("on");
+ },
+ clear(){this.active=0;this.born=[0,0,0,0,0];this.phase="flow";this.canvas&&this.canvas.classList.remove("on")},
  curve(i,t,offset){
    const ctx=this.ctx,w=this.w,h=this.h,cx=w/2,cy=h/2;
-   const amp=h*(.11+.018*i);
-   const ybase=h*(.30+i*.105);
+   const amp=h*(.075+.009*i);
+   const ybase=h*(.38+i*.058);
    const dir=i%2?1:-1;
-   const drift=Math.sin(t*.00042+i*1.7+offset)*w*.035;
+   const drift=Math.sin(t*.00034+i*1.15+offset)*w*.020;
    ctx.beginPath();
    for(let x=-40;x<=w+40;x+=18){
      const u=x/w;
@@ -624,12 +632,16 @@ const energy={
    ctx.globalCompositeOperation="lighter";
    for(let i=0;i<this.active;i++){
      const col=this.colors[i];
+     const born=this.born[i]||t;
+     const entrance=Math.max(0,Math.min(1,(t-born)/4200));
+     const soft=entrance*entrance*(3-2*entrance);
+     ctx.save(); ctx.globalAlpha=soft;
      for(let k=0;k<4;k++){
        ctx.save();
        ctx.strokeStyle=col;
-       ctx.globalAlpha=k===0?.48:(.17-k*.025);
-       ctx.lineWidth=k===0?1.7:4+k*3;
-       ctx.shadowColor=col;ctx.shadowBlur=k===0?13:20;
+       ctx.globalAlpha=k===0?.25:(.095-k*.012);
+       ctx.lineWidth=k===0?1.25:3+k*2.4;
+       ctx.shadowColor=col;ctx.shadowBlur=k===0?10:15;
        this.curve(i,t,k*.48);
        ctx.restore();
      }
@@ -637,11 +649,12 @@ const energy={
      for(let n=0;n<7;n++){
        const u=((t*.000055*(1+i*.08)+n/7+i*.13)%1);
        const x=u*this.w;
-       const amp=this.h*(.11+.018*i), ybase=this.h*(.30+i*.105);
+       const amp=this.h*(.075+.009*i), ybase=this.h*(.38+i*.058);
        const y=ybase+Math.sin(u*Math.PI*2+t*.00115*(i%2?1:-1)+i*.82)*amp;
-       ctx.fillStyle=col;ctx.globalAlpha=.42;
+       ctx.fillStyle=col;ctx.globalAlpha=.20;
        ctx.beginPath();ctx.arc(x,y,1.2+(n%3)*.35,0,Math.PI*2);ctx.fill();
      }
+     ctx.restore();
    }
    if(this.phase==="burst"){
      const q=(t-this.burstAt)/1000,cx=this.w/2,cy=this.h/2;
