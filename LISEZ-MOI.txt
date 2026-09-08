@@ -1,19 +1,10 @@
-D000 — CÉRÉMONIE D'INITIATION V0.3 — GITHUB RACINE
+D000 — V0.3.2 CORRECTIF
 
-CORRECTIONS VALIDÉES :
-- utilisation des six emblèmes officiels déjà validés, en couleur ;
-- aucune recréation des logos ;
-- les cinq Ombres convergent puis disparaissent ;
-- l'emblème de l'Ordre apparaît SEUL ;
-- avant l'affectation, l'emblème de l'Ordre disparaît ;
-- l'affectation affiche SEULEMENT l'emblème couleur de la Division attribuée ;
-- suppression de la superposition finale observée en V0.2.
+Correction du bug de la V0.3.1 :
+- suppression de l'ancien calque final qui pouvait se superposer ;
+- l'emblème de l'Ordre disparaît réellement avant l'affectation ;
+- un seul emblème est affiché sur l'écran final : celui de la Division attribuée ;
+- les six PNG officiels fournis par l'utilisateur sont conservés ;
+- tous les fichiers restent à la racine pour GitHub Pages.
 
-À mettre directement à la racine GitHub :
-index.html
-ordre.png
-oeil.png
-flamme.png
-main.png
-spirale.png
-sablier.png
+Remplacer tous les anciens fichiers du dépôt de test par ceux de ce ZIP.
