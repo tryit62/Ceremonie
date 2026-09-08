@@ -449,13 +449,61 @@ button:hover{border-color:#aaa}
  #geo.order-field{width:105vmin!important;height:105vmin!important}
 }
 
+
+/* V0.9 DEMO — CIEL TRANSITOIRE + CONSTRUCTION ANIMÉE */
+#starfield{position:absolute;inset:0;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 2.8s ease}
+#starfield.fade{opacity:1}
+#starfield.out{opacity:0}
+.star{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(245,247,245,.72);box-shadow:0 0 8px rgba(255,255,255,.20);animation:starLife var(--dur) ease-in-out var(--delay) infinite}
+.star.big{width:3px;height:3px;background:rgba(255,255,255,.85);box-shadow:0 0 13px rgba(255,255,255,.28)}
+@keyframes starLife{0%,100%{opacity:0;transform:scale(.45)}22%{opacity:.18}48%{opacity:.9;transform:scale(1)}72%{opacity:.22}}
+
+/* Rien de circulaire n'est visible au départ. */
+#geo.order-field.opening-presence{opacity:0!important;animation:none!important}
+#geo.order-field.opening-presence .field-arc,
+#geo.order-field.opening-presence .field-grid,
+#geo.order-field.opening-presence .field-core{opacity:0!important}
+
+/* À la première Division, la géométrie naît réellement. */
+#geo.order-field.stage1,#geo.order-field.stage2,#geo.order-field.stage3,#geo.order-field.stage4,#geo.order-field.stage5{opacity:.68!important}
+#geo.order-field.stage1 .field-grid{animation:gridBirth 2.8s ease both}
+@keyframes gridBirth{0%{opacity:0;transform:scale(.92)}100%{opacity:.22;transform:scale(1)}}
+
+/* Chaque Division déclenche une vraie écriture animée de son secteur. */
+#geo.order-field.stage1:before{animation:sectorBirth1 3.4s cubic-bezier(.18,.75,.2,1) both}
+#geo.order-field.stage2:before{animation:sectorBirth2 3.4s cubic-bezier(.18,.75,.2,1) both}
+#geo.order-field.stage3:before{animation:sectorBirth3 3.4s cubic-bezier(.18,.75,.2,1) both}
+#geo.order-field.stage4:before{animation:sectorBirth4 3.4s cubic-bezier(.18,.75,.2,1) both}
+#geo.order-field.stage5:before{animation:sectorBirth5 3.8s cubic-bezier(.18,.75,.2,1) both}
+@keyframes sectorBirth1{0%{opacity:0;transform:translate(-50%,-50%) scale(.82) rotate(-7deg)}100%{opacity:.42;transform:translate(-50%,-50%) scale(1) rotate(0)}}
+@keyframes sectorBirth2{0%{opacity:.22;transform:translate(-50%,-50%) scale(.94) rotate(5deg)}100%{opacity:.49;transform:translate(-50%,-50%) scale(1) rotate(0)}}
+@keyframes sectorBirth3{0%{opacity:.28;transform:translate(-50%,-50%) scale(.95) rotate(-4deg)}100%{opacity:.56;transform:translate(-50%,-50%) scale(1) rotate(0)}}
+@keyframes sectorBirth4{0%{opacity:.34;transform:translate(-50%,-50%) scale(.96) rotate(3deg)}100%{opacity:.63;transform:translate(-50%,-50%) scale(1) rotate(0)}}
+@keyframes sectorBirth5{0%{opacity:.40;filter:blur(3px);transform:translate(-50%,-50%) scale(.96)}100%{opacity:.74;filter:blur(0);transform:translate(-50%,-50%) scale(1)}}
+
+/* Anneaux eux-mêmes se dessinent progressivement avec l'arrivée des Divisions. */
+#geo.order-field .field-arc{transform:translate(-50%,-50%) scale(.88);opacity:0!important}
+#geo.order-field.stage1 .arc1{animation:ringIn 3s ease forwards}
+#geo.order-field.stage2 .arc2{animation:ringIn 3s ease forwards}
+#geo.order-field.stage3 .arc1,#geo.order-field.stage3 .arc2,
+#geo.order-field.stage4 .arc1,#geo.order-field.stage4 .arc2,
+#geo.order-field.stage5 .arc1,#geo.order-field.stage5 .arc2{opacity:.62!important;transform:translate(-50%,-50%) scale(1)}
+@keyframes ringIn{0%{opacity:0;transform:translate(-50%,-50%) scale(.82)}100%{opacity:.58;transform:translate(-50%,-50%) scale(1)}}
+
+/* Le noyau n'existe qu'après plusieurs Divisions. */
+#geo.order-field .field-core{opacity:0!important}
+#geo.order-field.stage3 .field-core{animation:coreIn 2.6s ease forwards}
+#geo.order-field.stage4 .field-core,#geo.order-field.stage5 .field-core{opacity:.48!important}
+@keyframes coreIn{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}100%{opacity:.45;transform:translate(-50%,-50%) scale(1)}}
+
 </style>
 </head>
 <body>
 <audio id="theme" preload="auto" playsinline webkit-playsinline src="ceremonie.mp3"></audio>
 <div id="stage">
  <div id="grain"></div><div id="sweep"></div><div id="sealrings"></div><div id="divisionFinal"><img id="divisionFinalImg" alt=""></div>
- <div class="geometry order-field" id="geo" aria-hidden="true">
+ <div id="starfield" aria-hidden="true"></div>
+<div class="geometry order-field" id="geo" aria-hidden="true">
  <div class="field-grid"></div>
  <div class="field-arc arc1"></div><div class="field-arc arc2"></div>
  <div class="division-layer eye"><i class="sight h1"></i><i class="sight h2"></i><i class="sight v1"></i><i class="point p1"></i><i class="point p2"></i><i class="point p3"></i></div>
@@ -516,7 +564,22 @@ const $=id=>document.getElementById(id);
 function later(ms,fn){timers.push(setTimeout(fn,ms))}
 function clearTimers(){timers.forEach(clearTimeout);timers=[]}
 function cap(txt,ms=4200){$("caption").textContent=txt;$("caption").classList.add("show");later(ms,()=>$("caption").classList.remove("show"))}
+
+function buildStars(){
+ const f=document.getElementById("starfield"); if(!f||f.children.length)return;
+ let seed=1705;
+ const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280};
+ for(let i=0;i<72;i++){
+   const e=document.createElement("i"); e.className="star"+(i%13===0?" big":"");
+   e.style.left=(3+rnd()*94)+"%"; e.style.top=(4+rnd()*90)+"%";
+   e.style.setProperty("--dur",(4.8+rnd()*5.8)+"s");
+   e.style.setProperty("--delay",(-rnd()*8)+"s"); f.appendChild(e);
+ }
+}
+buildStars();
+
 function reset(){
+ $("starfield").className="";
  clearTimers();
  ["s1","s2","s3","s4","s5"].forEach(id=>$(id).className="symbol");
  $("order").className="order";$("order").style.display="";$("divisionFinal").className="";$("divisionFinalImg").src=""; $("geo").style.opacity=0;$("sweep").className="";$("sealrings").className="";$("caption").className="";
@@ -525,6 +588,7 @@ function reset(){
  document.documentElement.style.setProperty("--accent","#d9d4c7");
 }
 function showSymbol(i,text){
+ if(i===1){$("starfield").className="out";}
  $("geo").className="geometry order-field stage"+i;
  const el=$("s"+i); el.classList.add("show","awake"); cap(text,3200);
  later(5600,()=>el.classList.add("orbit"));
@@ -534,7 +598,7 @@ function ceremony(){
 
  // V0.5 — synchronisation sur The Five-Note Seal (3:29.7)
  // Partie I : montée / révélation du monde
- later(2200,()=>{$("geo").className="geometry order-field opening-presence";$("geo").style.opacity=.62});
+ later(2200,()=>{$("starfield").className="fade";$("geo").className="geometry order-field opening-presence";$("geo").style.opacity=0});
  later(8000,()=>cap("DEPUIS QUE L'HOMME OBSERVE LE MONDE, IL CROIT REGARDER LA RÉALITÉ.",5200));
  later(13700,()=>cap("IL N'EN PERÇOIT QU'UNE VERSION.",3800));
  later(39000,()=>cap("DEPUIS DES SIÈCLES, CERTAINS ONT APPRIS À RECONNAÎTRE CE QUE D'AUTRES NE POUVAIENT VOIR.",9000));
