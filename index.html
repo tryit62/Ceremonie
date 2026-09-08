@@ -173,22 +173,52 @@ function showSymbol(i,text){
 }
 function ceremony(){
  reset(); $("intro").style.display="none"; $("testbar").style.display="flex";
+
+ // V0.5 — synchronisation sur The Five-Note Seal (3:29.7)
+ // Partie I : montée / révélation du monde
  later(2200,()=>{$("geo").style.opacity=.55;$("sweep").classList.add("go")});
  later(8000,()=>cap("DEPUIS QUE L'HOMME OBSERVE LE MONDE, IL CROIT REGARDER LA RÉALITÉ.",6500));
  later(24000,()=>cap("IL N'EN PERÇOIT QU'UNE VERSION.",4500));
  later(39000,()=>cap("DEPUIS DES SIÈCLES, CERTAINS ONT APPRIS À RECONNAÎTRE CE QUE D'AUTRES NE POUVAIENT VOIR.",9000));
+
+ // Partie II : les cinq Ombres, chacune disposant de son espace musical
  later(60000,()=>showSymbol(1,"CERTAINS ONT OBSERVÉ."));
  later(76000,()=>showSymbol(2,"CERTAINS ONT ADAPTÉ."));
  later(91000,()=>showSymbol(3,"CERTAINS ONT ANTICIPÉ."));
  later(107000,()=>showSymbol(4,"CERTAINS ONT PRÉSERVÉ."));
  later(122000,()=>showSymbol(5,"CERTAINS ONT CONTENU CE QUI NE DEVAIT PAS FRANCHIR LA LIMITE."));
+
+ // Charnière : les cinq deviennent l'Ordre
  later(135000,()=>cap("SÉPARÉES, ELLES SONT CINQ.",4500));
- later(143000,()=>{["s1","s2","s3","s4","s5"].forEach((id,k)=>later(k*160,()=>$(id).classList.add("converge")));$("sealrings").classList.add("show");later(6200,()=>["s1","s2","s3","s4","s5"].forEach(id=>$(id).classList.add("vanish")));});
+ later(143000,()=>{
+   ["s1","s2","s3","s4","s5"].forEach((id,k)=>later(k*160,()=>$(id).classList.add("converge")));
+   $("sealrings").classList.add("show");
+   later(6200,()=>["s1","s2","s3","s4","s5"].forEach(id=>$(id).classList.add("vanish")));
+ });
  later(148000,()=>cap("ENSEMBLE… ELLES SONT L'ORDRE.",5200));
- later(151000,()=>{$("flash").classList.remove("go");void $("flash").offsetWidth;$("flash").classList.add("go");$("order").classList.add("show","reveal")});
- later(188000,()=>{$("order").classList.add("exit");$("geo").style.opacity=.12;$("sealrings").className="";});
- later(211500,()=>{$("order").style.display="none";$("geo").style.opacity=0;});
-later(194000,()=>showFinal());
+
+ // Partie III : apogée. Plus aucune narration.
+ later(151000,()=>{
+   $("flash").classList.remove("go"); void $("flash").offsetWidth; $("flash").classList.add("go");
+   $("order").classList.add("show","reveal");
+ });
+
+ // L'emblème reste seul pendant tout l'apogée, puis commence sa disparition
+ // sur la vraie redescente finale du morceau.
+ later(198000,()=>{
+   $("order").classList.add("exit");
+   $("geo").style.opacity=.08;
+   $("sealrings").className="";
+ });
+
+ // Fin musicale ~209.7 s : noir absolu, puis respiration.
+ later(209700,()=>{
+   $("order").style.display="none";
+   $("geo").style.opacity=0;
+ });
+
+ // La transition administrative ne chevauche plus la musique.
+ later(212500,()=>showFinal());
 }
 function showFinal(){
  const d=divisions[selected];
