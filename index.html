@@ -101,13 +101,41 @@ button:hover{border-color:#aaa}
 .order{transition:opacity 4.8s ease,transform 5.2s cubic-bezier(.16,.72,.18,1)!important}
 .order.exit,.order.slowexit{opacity:0!important;transform:translate(-50%,-50%) scale(.90)!important}
 #geo{transition:opacity 3.5s ease}
+
+/* V0.7 — LE SCEAU DES CINQ */
+#geo.five-seal{position:absolute;left:50%;top:50%;width:min(78vmin,760px);height:min(78vmin,760px);transform:translate(-50%,-50%);opacity:0;transition:opacity 3.2s ease}
+#geo.five-seal:before,#geo.five-seal:after{display:none}
+#geo.five-seal .seal-circle{position:absolute;left:50%;top:50%;border:1px solid rgba(238,241,239,.10);border-radius:50%;transform:translate(-50%,-50%);transition:opacity 2.4s ease,transform 4s ease}
+#geo.five-seal .outer{width:88%;height:88%;opacity:.38}
+#geo.five-seal .inner{width:43%;height:43%;opacity:.22;border-style:dashed}
+#geo.five-seal .seal-axis{position:absolute;left:50%;top:50%;width:1px;height:43%;transform-origin:50% 0;background:linear-gradient(to bottom,rgba(238,241,239,.18),rgba(238,241,239,.018));opacity:.055;transition:opacity 2.4s ease,filter 2.4s ease}
+#geo.five-seal .a1{transform:rotate(0deg)} #geo.five-seal .a2{transform:rotate(72deg)} #geo.five-seal .a3{transform:rotate(144deg)} #geo.five-seal .a4{transform:rotate(216deg)} #geo.five-seal .a5{transform:rotate(288deg)}
+#geo.five-seal .seal-node{position:absolute;width:7px;height:7px;border:1px solid rgba(238,241,239,.22);border-radius:50%;opacity:.08;transition:opacity 2.4s ease,box-shadow 2.4s ease}
+#geo.five-seal .n1{left:49.5%;top:5%} #geo.five-seal .n2{left:91.5%;top:35%} #geo.five-seal .n3{left:76%;top:84%} #geo.five-seal .n4{left:22%;top:84%} #geo.five-seal .n5{left:6%;top:35%}
+#geo.five-seal .seal-core{position:absolute;left:50%;top:50%;width:10px;height:10px;border:1px solid rgba(238,241,239,.20);transform:translate(-50%,-50%) rotate(45deg);opacity:.16;transition:opacity 2.4s ease,transform 3.5s ease}
+#geo.five-seal.stage1 .a1,#geo.five-seal.stage1 .n1,
+#geo.five-seal.stage2 .a1,#geo.five-seal.stage2 .n1,#geo.five-seal.stage2 .a2,#geo.five-seal.stage2 .n2,
+#geo.five-seal.stage3 .a1,#geo.five-seal.stage3 .n1,#geo.five-seal.stage3 .a2,#geo.five-seal.stage3 .n2,#geo.five-seal.stage3 .a3,#geo.five-seal.stage3 .n3,
+#geo.five-seal.stage4 .a1,#geo.five-seal.stage4 .n1,#geo.five-seal.stage4 .a2,#geo.five-seal.stage4 .n2,#geo.five-seal.stage4 .a3,#geo.five-seal.stage4 .n3,#geo.five-seal.stage4 .a4,#geo.five-seal.stage4 .n4,
+#geo.five-seal.stage5 .seal-axis,#geo.five-seal.stage5 .seal-node{opacity:.68;filter:drop-shadow(0 0 4px rgba(255,255,255,.10))}
+#geo.five-seal.complete .outer{opacity:.68;transform:translate(-50%,-50%) scale(1.025)}
+#geo.five-seal.complete .inner{opacity:.48;transform:translate(-50%,-50%) scale(.975)}
+#geo.five-seal.complete .seal-core{opacity:.7;transform:translate(-50%,-50%) rotate(225deg) scale(1.22)}
+#caption{max-width:min(86vw,900px);letter-spacing:.15em;line-height:1.65;font-size:clamp(12px,1.35vw,17px);font-weight:400;text-shadow:0 0 18px rgba(255,255,255,.10)}
+
+#sweep{display:none!important}
 </style>
 </head>
 <body>
 <audio id="theme" preload="auto" playsinline webkit-playsinline src="ceremonie.mp3"></audio>
 <div id="stage">
  <div id="grain"></div><div id="sweep"></div><div id="sealrings"></div><div id="divisionFinal"><img id="divisionFinalImg" alt=""></div>
- <div class="geometry" id="geo"><div class="cross"></div></div>
+ <div class="geometry five-seal" id="geo" aria-hidden="true">
+ <div class="seal-circle outer"></div><div class="seal-circle inner"></div>
+ <div class="seal-axis a1"></div><div class="seal-axis a2"></div><div class="seal-axis a3"></div><div class="seal-axis a4"></div><div class="seal-axis a5"></div>
+ <div class="seal-node n1"></div><div class="seal-node n2"></div><div class="seal-node n3"></div><div class="seal-node n4"></div><div class="seal-node n5"></div>
+ <div class="seal-core"></div>
+</div>
  <div id="symbols">
   <div class="symbol" id="s1"><img src="oeil.png"></div>
   <div class="symbol" id="s2"><img src="flamme.png"></div>
@@ -168,6 +196,7 @@ function reset(){
  document.documentElement.style.setProperty("--accent","#d9d4c7");
 }
 function showSymbol(i,text){
+ $("geo").className="geometry five-seal stage"+i;
  const el=$("s"+i); el.classList.add("show","awake"); cap(text,3200);
  later(5600,()=>el.classList.add("orbit"));
 }
@@ -176,7 +205,7 @@ function ceremony(){
 
  // V0.5 — synchronisation sur The Five-Note Seal (3:29.7)
  // Partie I : montée / révélation du monde
- later(2200,()=>{$("geo").style.opacity=.55;$("sweep").classList.add("go")});
+ later(2200,()=>{$("geo").style.opacity=.34});
  later(8000,()=>cap("DEPUIS QUE L'HOMME OBSERVE LE MONDE, IL CROIT REGARDER LA RÉALITÉ.",5200));
  later(13700,()=>cap("IL N'EN PERÇOIT QU'UNE VERSION.",3800));
  later(39000,()=>cap("DEPUIS DES SIÈCLES, CERTAINS ONT APPRIS À RECONNAÎTRE CE QUE D'AUTRES NE POUVAIENT VOIR.",9000));
@@ -189,7 +218,7 @@ function ceremony(){
  later(122000,()=>showSymbol(5,"CERTAINS ONT CONTENU CE QUI NE DEVAIT PAS FRANCHIR LA LIMITE."));
 
  // Charnière : les cinq deviennent l'Ordre
- later(135000,()=>cap("SÉPARÉES, ELLES SONT CINQ.",4500));
+ later(135000,()=>{$("geo").className="geometry five-seal stage5 complete";cap("SÉPARÉES, ELLES SONT CINQ.",4500)});
  later(143000,()=>{
    ["s1","s2","s3","s4","s5"].forEach((id,k)=>later(k*160,()=>$(id).classList.add("converge")));
    $("sealrings").classList.add("show");
@@ -200,7 +229,7 @@ function ceremony(){
  // Partie III : apogée. Plus aucune narration.
  later(151000,()=>{
    $("flash").classList.remove("go"); void $("flash").offsetWidth; $("flash").classList.add("go");
-   $("order").classList.add("show","reveal");
+   $("order").classList.add("show","reveal");$("geo").style.opacity=.14;
  });
 
  // L'emblème reste seul pendant tout l'apogée, puis commence sa disparition
