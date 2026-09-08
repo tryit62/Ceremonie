@@ -124,17 +124,51 @@ button:hover{border-color:#aaa}
 #caption{max-width:min(86vw,900px);letter-spacing:.15em;line-height:1.65;font-size:clamp(12px,1.35vw,17px);font-weight:400;text-shadow:0 0 18px rgba(255,255,255,.10)}
 
 #sweep{display:none!important}
+
+/* V0.7.1 — CONSTRUCTION DE L'ORDRE */
+#geo.order-field{position:absolute;left:50%;top:50%;width:min(94vmin,980px);height:min(78vmin,820px);transform:translate(-50%,-50%);opacity:0;transition:opacity 3s ease,transform 5s ease;overflow:visible}
+#geo.order-field:before,#geo.order-field:after{display:none}
+.field-grid{position:absolute;inset:5%;opacity:.38;background-image:linear-gradient(rgba(238,241,239,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(238,241,239,.045) 1px,transparent 1px);background-size:7.5% 10%;mask-image:radial-gradient(ellipse at center,#000 18%,rgba(0,0,0,.8) 54%,transparent 84%)}
+.field-grid:before,.field-grid:after{content:"";position:absolute;inset:9% 11%;border:1px solid rgba(238,241,239,.07);transform:skewX(-7deg) rotate(-3deg)}
+.field-grid:after{inset:19% 21%;transform:skewY(5deg) rotate(8deg);opacity:.65}
+.field-arc{position:absolute;left:50%;top:50%;border:1px solid rgba(238,241,239,.075);border-radius:50%;transform:translate(-50%,-50%);opacity:.4;transition:all 3s ease}
+.arc1{width:80%;height:80%}.arc2{width:49%;height:49%;border-style:dashed;opacity:.24}
+.division-layer{position:absolute;inset:0;opacity:0;transition:opacity 2.2s ease}
+.order-field.stage1 .eye,.order-field.stage2 .eye,.order-field.stage2 .flame,.order-field.stage3 .eye,.order-field.stage3 .flame,.order-field.stage3 .hand,.order-field.stage4 .eye,.order-field.stage4 .flame,.order-field.stage4 .hand,.order-field.stage4 .spiral,.order-field.stage5 .division-layer{opacity:1}
+.sight,.route,.branch,.trace,.contain,.point{position:absolute;display:block}
+.eye .sight{height:1px;background:linear-gradient(90deg,transparent,rgba(225,240,255,.32),transparent)}
+.eye .h1{left:8%;top:36%;width:84%;transform:rotate(-7deg)}.eye .h2{left:14%;top:63%;width:72%;transform:rotate(5deg)}
+.eye .v1{left:52%;top:14%;width:1px;height:68%;background:linear-gradient(transparent,rgba(225,240,255,.28),transparent)}
+.eye .point{width:5px;height:5px;border:1px solid rgba(225,240,255,.45);border-radius:50%;box-shadow:0 0 9px rgba(225,240,255,.16)}
+.eye .p1{left:22%;top:40%}.eye .p2{left:57%;top:31%}.eye .p3{left:72%;top:59%}
+.flame .route{height:1px;width:48%;left:27%;top:48%;background:linear-gradient(90deg,transparent,rgba(255,120,100,.31),transparent);transform-origin:center}
+.flame .r1{transform:rotate(18deg)}.flame .r2{transform:rotate(-18deg)}.flame .r3{transform:rotate(180deg) translateY(18px);opacity:.7}
+.hand .branch{height:1px;width:38%;left:50%;top:50%;transform-origin:left center;background:linear-gradient(90deg,rgba(220,205,135,.31),transparent)}
+.hand .b1{transform:rotate(-42deg)}.hand .b2{transform:rotate(-14deg)}.hand .b3{transform:rotate(18deg)}.hand .b4{transform:rotate(47deg)}
+.spiral .trace{left:50%;top:50%;border:1px solid rgba(175,215,185,.20);border-radius:50%;transform:translate(-50%,-50%)}
+.spiral .t1{width:31%;height:31%;opacity:.85}.spiral .t2{width:49%;height:49%;opacity:.55}.spiral .t3{width:67%;height:67%;opacity:.3}
+.hourglass .contain{left:50%;top:50%;border:1px solid rgba(180,155,225,.22);border-radius:50%;transform:translate(-50%,-50%)}
+.hourglass .c1{width:87%;height:87%}.hourglass .c2{width:73%;height:73%;border-style:dashed}.hourglass .c3{width:59%;height:59%;opacity:.65}
+.field-core{position:absolute;left:50%;top:50%;width:8px;height:8px;border:1px solid rgba(245,245,245,.28);transform:translate(-50%,-50%) rotate(45deg);opacity:.4;transition:all 3s ease}
+.order-field.complete .field-core{transform:translate(-50%,-50%) rotate(225deg) scale(1.45);opacity:.85}
+.order-field.complete .field-arc{opacity:.7}
+.order-field.complete{transform:translate(-50%,-50%) scale(.985)}
+
 </style>
 </head>
 <body>
 <audio id="theme" preload="auto" playsinline webkit-playsinline src="ceremonie.mp3"></audio>
 <div id="stage">
  <div id="grain"></div><div id="sweep"></div><div id="sealrings"></div><div id="divisionFinal"><img id="divisionFinalImg" alt=""></div>
- <div class="geometry five-seal" id="geo" aria-hidden="true">
- <div class="seal-circle outer"></div><div class="seal-circle inner"></div>
- <div class="seal-axis a1"></div><div class="seal-axis a2"></div><div class="seal-axis a3"></div><div class="seal-axis a4"></div><div class="seal-axis a5"></div>
- <div class="seal-node n1"></div><div class="seal-node n2"></div><div class="seal-node n3"></div><div class="seal-node n4"></div><div class="seal-node n5"></div>
- <div class="seal-core"></div>
+ <div class="geometry order-field" id="geo" aria-hidden="true">
+ <div class="field-grid"></div>
+ <div class="field-arc arc1"></div><div class="field-arc arc2"></div>
+ <div class="division-layer eye"><i class="sight h1"></i><i class="sight h2"></i><i class="sight v1"></i><i class="point p1"></i><i class="point p2"></i><i class="point p3"></i></div>
+ <div class="division-layer flame"><i class="route r1"></i><i class="route r2"></i><i class="route r3"></i></div>
+ <div class="division-layer hand"><i class="branch b1"></i><i class="branch b2"></i><i class="branch b3"></i><i class="branch b4"></i></div>
+ <div class="division-layer spiral"><i class="trace t1"></i><i class="trace t2"></i><i class="trace t3"></i></div>
+ <div class="division-layer hourglass"><i class="contain c1"></i><i class="contain c2"></i><i class="contain c3"></i></div>
+ <div class="field-core"></div>
 </div>
  <div id="symbols">
   <div class="symbol" id="s1"><img src="oeil.png"></div>
@@ -196,7 +230,7 @@ function reset(){
  document.documentElement.style.setProperty("--accent","#d9d4c7");
 }
 function showSymbol(i,text){
- $("geo").className="geometry five-seal stage"+i;
+ $("geo").className="geometry order-field stage"+i;
  const el=$("s"+i); el.classList.add("show","awake"); cap(text,3200);
  later(5600,()=>el.classList.add("orbit"));
 }
@@ -205,7 +239,7 @@ function ceremony(){
 
  // V0.5 — synchronisation sur The Five-Note Seal (3:29.7)
  // Partie I : montée / révélation du monde
- later(2200,()=>{$("geo").style.opacity=.34});
+ later(2200,()=>{$("geo").style.opacity=.58});
  later(8000,()=>cap("DEPUIS QUE L'HOMME OBSERVE LE MONDE, IL CROIT REGARDER LA RÉALITÉ.",5200));
  later(13700,()=>cap("IL N'EN PERÇOIT QU'UNE VERSION.",3800));
  later(39000,()=>cap("DEPUIS DES SIÈCLES, CERTAINS ONT APPRIS À RECONNAÎTRE CE QUE D'AUTRES NE POUVAIENT VOIR.",9000));
@@ -218,7 +252,7 @@ function ceremony(){
  later(122000,()=>showSymbol(5,"CERTAINS ONT CONTENU CE QUI NE DEVAIT PAS FRANCHIR LA LIMITE."));
 
  // Charnière : les cinq deviennent l'Ordre
- later(135000,()=>{$("geo").className="geometry five-seal stage5 complete";cap("SÉPARÉES, ELLES SONT CINQ.",4500)});
+ later(135000,()=>{$("geo").className="geometry order-field stage5 complete";cap("SÉPARÉES, ELLES SONT CINQ.",4500)});
  later(143000,()=>{
    ["s1","s2","s3","s4","s5"].forEach((id,k)=>later(k*160,()=>$(id).classList.add("converge")));
    $("sealrings").classList.add("show");
@@ -263,7 +297,7 @@ function showFinal(){
    $("divisionFinalImg").src=d.img;
    $("divisionFinal").classList.add("show");
  });
- later(9000,()=>cap("AUJOURD'HUI, CETTE RESPONSABILITÉ DEVIENT ÉGALEMENT LA VÔTRE.",6500));
+ later(9000,()=>cap("BIENVENUE PARMI LES CINQ OMBRES… INITIÉ.",6500));
  later(17500,()=>cap("BIENVENUE PARMI LES CINQ OMBRES… INITIÉ.",8000));
 }
 function restart(){reset();$("intro").style.display="flex";$("testbar").style.display="none"}
