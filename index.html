@@ -104,7 +104,7 @@ button:hover{border-color:#aaa}
 </style>
 </head>
 <body>
-<audio id="theme" preload="auto" playsinline webkit-playsinline src="theme.mp3"></audio>
+<audio id="theme" preload="auto" playsinline webkit-playsinline src="ceremonie.mp3"></audio>
 <div id="stage">
  <div id="grain"></div><div id="sweep"></div><div id="sealrings"></div><div id="divisionFinal"><img id="divisionFinalImg" alt=""></div>
  <div class="geometry" id="geo"><div class="cross"></div></div>
@@ -140,7 +140,7 @@ button:hover{border-color:#aaa}
     <option value="spirale">SPIRALE D'OS</option>
     <option value="sablier">SABLIER NOIR</option>
    </select>
-   <button id="launch">LANCER LA CÉRÉMONIE</button><button type="button" onclick="testAudio()" style="margin-left:10px">TEST SON 5 s</button>
+   <button id="launch">LANCER LA CÉRÉMONIE</button><button type="button" onclick="testAudio()" style="margin-left:10px">TEST AUDIO 5 s</button>
   </div>
  </div>
 </div>
@@ -177,8 +177,8 @@ function ceremony(){
  // V0.5 — synchronisation sur The Five-Note Seal (3:29.7)
  // Partie I : montée / révélation du monde
  later(2200,()=>{$("geo").style.opacity=.55;$("sweep").classList.add("go")});
- later(8000,()=>cap("DEPUIS QUE L'HOMME OBSERVE LE MONDE, IL CROIT REGARDER LA RÉALITÉ.",6500));
- later(24000,()=>cap("IL N'EN PERÇOIT QU'UNE VERSION.",4500));
+ later(8000,()=>cap("DEPUIS QUE L'HOMME OBSERVE LE MONDE, IL CROIT REGARDER LA RÉALITÉ.",5200));
+ later(13700,()=>cap("IL N'EN PERÇOIT QU'UNE VERSION.",3800));
  later(39000,()=>cap("DEPUIS DES SIÈCLES, CERTAINS ONT APPRIS À RECONNAÎTRE CE QUE D'AUTRES NE POUVAIENT VOIR.",9000));
 
  // Partie II : les cinq Ombres, chacune disposant de son espace musical
