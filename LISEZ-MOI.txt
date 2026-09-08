@@ -1,6 +1,0 @@
-D000 V0.4.2 — AUDIO FIX
-1. Mettre TOUS les fichiers à la racine GitHub, notamment theme.mp3.
-2. Ouvrir la page et toucher TEST SON 5 s.
-3. Si le test fonctionne, LANCER LA CÉRÉMONIE doit démarrer la musique immédiatement.
-4. Si TEST SON affiche une erreur, le problème vient du chargement/chemin du MP3 et le message donnera l'erreur.
-Cette version supprime le conflit où la piste pouvait être lancée puis immédiatement remise à zéro.
