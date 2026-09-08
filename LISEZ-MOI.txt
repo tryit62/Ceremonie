@@ -1,0 +1,9 @@
+D000 — V0.4.1 — CORRECTIF AUDIO SAFARI / iOS
+
+Le clic/toucher sur LANCER LA CÉRÉMONIE déclenche maintenant directement theme.mp3.
+- playsinline / webkit-playsinline activés
+- muted=false et volume=1 forcés
+- suppression du conflit qui pouvait remettre l'audio à zéro après son lancement
+- les PNG officiels et les transitions fluides sont conservés
+
+IMPORTANT : envoyer index.html ET theme.mp3 à la racine GitHub, avec les six PNG.
