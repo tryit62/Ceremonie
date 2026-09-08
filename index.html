@@ -104,6 +104,7 @@ button:hover{border-color:#aaa}
 </style>
 </head>
 <body>
+<audio id="theme" preload="auto" src="theme.mp3"></audio>
 <div id="stage">
  <div id="grain"></div><div id="sweep"></div><div id="sealrings"></div><div id="divisionFinal"><img id="divisionFinalImg" alt=""></div>
  <div class="geometry" id="geo"><div class="cross"></div></div>
@@ -186,7 +187,7 @@ function ceremony(){
  later(148000,()=>cap("ENSEMBLE… ELLES SONT L'ORDRE.",5200));
  later(151000,()=>{$("flash").classList.remove("go");void $("flash").offsetWidth;$("flash").classList.add("go");$("order").classList.add("show","reveal")});
  later(188000,()=>{$("order").classList.add("exit");$("geo").style.opacity=.12;$("sealrings").className="";});
- later(199000,()=>{$("order").style.display="none";$("geo").style.opacity=0;});
+ later(211500,()=>{$("order").style.display="none";$("geo").style.opacity=0;});
 later(194000,()=>showFinal());
 }
 function showFinal(){
