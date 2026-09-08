@@ -1,19 +1,19 @@
-D000 — CÉRÉMONIE D'INITIATION V0.2 — VERSION GITHUB RACINE
+D000 — CÉRÉMONIE D'INITIATION V0.3 — GITHUB RACINE
 
-Tous les fichiers doivent être placés À LA RACINE du dépôt GitHub Pages.
+CORRECTIONS VALIDÉES :
+- utilisation des six emblèmes officiels déjà validés, en couleur ;
+- aucune recréation des logos ;
+- les cinq Ombres convergent puis disparaissent ;
+- l'emblème de l'Ordre apparaît SEUL ;
+- avant l'affectation, l'emblème de l'Ordre disparaît ;
+- l'affectation affiche SEULEMENT l'emblème couleur de la Division attribuée ;
+- suppression de la superposition finale observée en V0.2.
 
-Structure :
+À mettre directement à la racine GitHub :
 index.html
-ordre_mask.png
-oeil_mask.png
-flamme_mask.png
-main_mask.png
-spirale_mask.png
-sablier_mask.png
-
-Aucun dossier assets n'est nécessaire.
-
-IMPORTANT :
-- Ne renommez pas les PNG.
-- index.html doit être au même niveau que les six PNG.
-- GitHub Pages doit publier depuis la branche contenant ces fichiers, dossier /(root).
+ordre.png
+oeil.png
+flamme.png
+main.png
+spirale.png
+sablier.png
