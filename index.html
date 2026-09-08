@@ -154,7 +154,7 @@ const divisions={
  spirale:{name:"SPIRALE D'OS",color:"#8eaa92",img:"spirale.png"},
  sablier:{name:"SABLIER NOIR",color:"#8e74bb",img:"sablier.png"}
 };
-let timers=[], selected="oeil";
+let timers=[], selected="oeil", audioTestTimer=null;
 const $=id=>document.getElementById(id);
 function later(ms,fn){timers.push(setTimeout(fn,ms))}
 function clearTimers(){timers.forEach(clearTimeout);timers=[]}
@@ -210,31 +210,23 @@ function restart(){reset();$("intro").style.display="flex";$("testbar").style.di
 function skipToFinal(){reset();$("intro").style.display="none";$("testbar").style.display="flex";showFinal()}
 $("launch").onclick=()=>{
   selected=$("choice").value;
-
-  // Même séquence que TEST SON, qui est confirmée fonctionnelle sur l'appareil.
-  const a=$("theme");
   if(audioTestTimer){clearTimeout(audioTestTimer);audioTestTimer=null;}
+  const a=$("theme");
   a.pause();
   a.currentTime=0;
   a.muted=false;
   a.volume=1;
-
-  const p=a.play();
-  if(p){
-    p.then(()=>ceremony())
-     .catch(e=>alert("Erreur audio au lancement : "+e.name+" — "+e.message));
-  }else{
-    ceremony();
-  }
+  a.play().then(()=>ceremony()).catch(e=>alert("Erreur audio : "+e.message));
 };
 
 
 
 function testAudio(){
  const a=$("theme");
- a.muted=false;a.volume=1;a.currentTime=0;
+ if(audioTestTimer){clearTimeout(audioTestTimer);}
+ a.pause();a.currentTime=0;a.muted=false;a.volume=1;
  a.play().then(()=>{
-   setTimeout(()=>{a.pause();a.currentTime=0;},5000);
+   audioTestTimer=setTimeout(()=>{a.pause();a.currentTime=0;audioTestTimer=null;},5000);
  }).catch(e=>alert("Erreur audio : "+e.message));
 }
 
