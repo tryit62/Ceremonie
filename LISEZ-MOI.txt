@@ -1,0 +1,19 @@
+D000 — CÉRÉMONIE D'INITIATION V0.2 — VERSION GITHUB RACINE
+
+Tous les fichiers doivent être placés À LA RACINE du dépôt GitHub Pages.
+
+Structure :
+index.html
+ordre_mask.png
+oeil_mask.png
+flamme_mask.png
+main_mask.png
+spirale_mask.png
+sablier_mask.png
+
+Aucun dossier assets n'est nécessaire.
+
+IMPORTANT :
+- Ne renommez pas les PNG.
+- index.html doit être au même niveau que les six PNG.
+- GitHub Pages doit publier depuis la branche contenant ces fichiers, dossier /(root).

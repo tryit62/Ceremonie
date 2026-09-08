@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>D000 — Cérémonie d'Initiation V0.1</title>
+<style>
+:root{--ink:#e8e5dc;--muted:#77766f;--line:rgba(232,229,220,.16);--accent:#d9d4c7}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#000;color:var(--ink);font-family:"Courier New",monospace;overflow:hidden}
+body{touch-action:manipulation}
+#stage{position:fixed;inset:0;background:#000;isolation:isolate}
+#grain{position:absolute;inset:-50%;opacity:.035;pointer-events:none;background-image:repeating-radial-gradient(circle at 30% 20%,#fff 0 1px,transparent 1px 4px);animation:grain 8s steps(10) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(3%,-2%)}50%{transform:translate(-2%,3%)}75%{transform:translate(1%,2%)}100%{transform:translate(0,0)}}
+.geometry{position:absolute;left:50%;top:50%;width:min(76vw,76vh);aspect-ratio:1;transform:translate(-50%,-50%);opacity:0;transition:opacity 2.4s ease}
+.geometry:before,.geometry:after{content:"";position:absolute;inset:0;border:1px solid var(--line);border-radius:50%;animation:rot 38s linear infinite}
+.geometry:after{inset:12%;border-style:dashed;animation-direction:reverse;animation-duration:52s}
+@keyframes rot{to{transform:rotate(360deg)}}
+.cross{position:absolute;inset:0;opacity:.13}
+.cross:before,.cross:after{content:"";position:absolute;background:#ddd}
+.cross:before{width:1px;height:100%;left:50%}
+.cross:after{height:1px;width:100%;top:50%}
+#symbols{position:absolute;inset:0}
+.symbol{position:absolute;left:50%;top:50%;width:min(28vw,28vh);aspect-ratio:1;transform:translate(-50%,-50%) scale(.74);opacity:0;filter:drop-shadow(0 0 18px rgba(255,255,255,.12));transition:opacity 2s ease,transform 3.2s cubic-bezier(.2,.7,.1,1),left 3s ease,top 3s ease}
+.symbol img,.order img{width:100%;height:100%;object-fit:contain}
+.symbol.show{opacity:.92;transform:translate(-50%,-50%) scale(1)}
+.symbol.orbit{width:min(19vw,19vh);opacity:.7}
+#s1.orbit{left:50%;top:23%} #s2.orbit{left:75%;top:42%} #s3.orbit{left:66%;top:72%} #s4.orbit{left:34%;top:72%} #s5.orbit{left:25%;top:42%}
+.symbol.converge{left:50%!important;top:50%!important;transform:translate(-50%,-50%) scale(.18) rotate(22deg);opacity:0;transition-duration:3.5s}
+.order{position:absolute;left:50%;top:50%;width:min(54vw,54vh);transform:translate(-50%,-50%) scale(.82);opacity:0;transition:opacity 3s ease,transform 4s cubic-bezier(.12,.8,.18,1);filter:drop-shadow(0 0 24px rgba(255,255,255,.13))}
+.order.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#caption{position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);width:min(88vw,900px);text-align:center;letter-spacing:.25em;font-size:clamp(11px,1.25vw,17px);opacity:0;transition:opacity 1.2s ease;text-transform:uppercase}
+#caption.show{opacity:.82}
+#status{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 1.3s ease}
+#status.show{opacity:1}
+.statusbox{width:min(86vw,680px);border-top:1px solid #5e5d58;border-bottom:1px solid #5e5d58;padding:26px 12px;text-align:left}
+.row{display:flex;justify-content:space-between;gap:20px;padding:7px 0;letter-spacing:.12em;font-size:clamp(11px,1.5vw,17px)}
+.row span:first-child{color:#777}
+#division{font-weight:bold}
+#finalLogo{position:absolute;left:50%;top:31%;width:min(32vw,32vh);transform:translate(-50%,-50%);opacity:0;transition:opacity 1.5s ease;filter:drop-shadow(0 0 25px color-mix(in srgb,var(--accent) 35%,transparent))}
+#finalLogo.show{opacity:1}
+#intro{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#000;z-index:50}
+.panel{width:min(88vw,720px);padding:30px;border:1px solid #343434;background:#050505}
+.kicker{font-size:11px;letter-spacing:.25em;color:#777;margin-bottom:12px}
+h1{font-size:clamp(19px,3vw,31px);font-weight:normal;letter-spacing:.12em;margin:0 0 12px}
+p{color:#8f8e88;line-height:1.55;font-size:13px}
+.controls{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
+button,select{background:#090909;color:#d8d6ce;border:1px solid #444;padding:11px 13px;font:12px "Courier New",monospace;letter-spacing:.08em}
+button:hover{border-color:#aaa}
+#testbar{position:fixed;top:10px;right:10px;z-index:60;display:none;gap:6px;opacity:.55}
+#testbar:hover{opacity:1}
+#testbar button{padding:7px 9px;font-size:10px}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.flash.go{animation:flash .75s ease-out}
+@keyframes flash{0%{opacity:0}20%{opacity:.13}100%{opacity:0}}
+@media(max-width:650px){.symbol{width:min(42vw,28vh)}.symbol.orbit{width:min(28vw,18vh)}.order{width:min(78vw,48vh)}.row{letter-spacing:.06em}}
+
+/* V0.2 — mise en scène avancée */
+#vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,transparent 30%,rgba(0,0,0,.34) 68%,rgba(0,0,0,.86) 100%);z-index:8}
+#sweep{position:absolute;left:50%;top:50%;width:min(90vw,90vh);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;opacity:0;pointer-events:none;background:conic-gradient(from 0deg,transparent 0 83%,rgba(255,255,255,.08) 87%,transparent 91%);mix-blend-mode:screen}
+#sweep.go{opacity:.55;animation:sweep 7s linear infinite}@keyframes sweep{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.symbol:before,.symbol:after{content:"";position:absolute;inset:4%;border-radius:50%;opacity:0;pointer-events:none}
+.symbol.awake:before{border:1px solid rgba(255,255,255,.16);animation:ringbirth 2.6s ease-out}
+.symbol.awake:after{inset:-9%;border:1px dashed rgba(255,255,255,.10);animation:ringbirth 3.4s ease-out reverse}
+@keyframes ringbirth{0%{opacity:0;transform:scale(.55) rotate(-20deg)}35%{opacity:.8}100%{opacity:0;transform:scale(1.25) rotate(35deg)}}
+#s1.awake img{animation:eyeIn 3.5s ease-out}@keyframes eyeIn{0%{clip-path:inset(48% 0 48% 0);filter:blur(7px)}55%{clip-path:inset(0 0 0 0);filter:blur(0)}}
+#s2.awake img{animation:flameIn 3.2s cubic-bezier(.2,.9,.2,1)}@keyframes flameIn{0%{clip-path:inset(100% 0 0 0);transform:scaleY(.35)}70%{clip-path:inset(0);transform:scaleY(1.08)}100%{transform:scaleY(1)}}
+#s3.awake img{animation:handIn 3.2s steps(12)}@keyframes handIn{0%{opacity:.05;transform:translateY(14px)}25%{opacity:.3}45%{opacity:.1}55%{opacity:.7}100%{opacity:1;transform:none}}
+#s4.awake img{animation:spiralIn 4.5s cubic-bezier(.1,.8,.2,1)}@keyframes spiralIn{0%{opacity:0;transform:rotate(-130deg) scale(.3)}100%{opacity:1;transform:rotate(0) scale(1)}}
+#s5.awake img{animation:hourIn 4.2s ease-out}@keyframes hourIn{0%{opacity:0;transform:scaleY(1.35);filter:blur(12px)}35%{opacity:.35}60%{opacity:.15}100%{opacity:1;transform:scaleY(1);filter:none}}
+.order.reveal{animation:orderReveal 6s cubic-bezier(.12,.8,.18,1) forwards}
+@keyframes orderReveal{0%{opacity:0;transform:translate(-50%,-50%) scale(.5);filter:blur(18px) drop-shadow(0 0 0 #fff)}
+22%{opacity:.18;filter:blur(5px) drop-shadow(0 0 30px rgba(255,255,255,.5))}
+48%{opacity:.95;transform:translate(-50%,-50%) scale(1.08);filter:blur(0) drop-shadow(0 0 55px rgba(255,255,255,.2))}
+100%{opacity:1;transform:translate(-50%,-50%) scale(1);filter:drop-shadow(0 0 24px rgba(255,255,255,.13))}}
+#sealrings{position:absolute;left:50%;top:50%;width:min(65vw,65vh);aspect-ratio:1;transform:translate(-50%,-50%);opacity:0;pointer-events:none}
+#sealrings:before,#sealrings:after{content:"";position:absolute;inset:0;border:1px solid rgba(255,255,255,.18);border-radius:50%}
+#sealrings:after{inset:10%;border-style:dotted}
+#sealrings.show{opacity:1;animation:seal 5.5s ease-out}@keyframes seal{0%{opacity:0;transform:translate(-50%,-50%) scale(1.5) rotate(-55deg)}30%{opacity:.7}100%{opacity:.2;transform:translate(-50%,-50%) scale(1) rotate(0)}}
+</style>
+</head>
+<body>
+<div id="stage">
+ <div id="grain"></div><div id="sweep"></div><div id="sealrings"></div>
+ <div class="geometry" id="geo"><div class="cross"></div></div>
+ <div id="symbols">
+  <div class="symbol" id="s1"><img src="oeil_mask.png"></div>
+  <div class="symbol" id="s2"><img src="flamme_mask.png"></div>
+  <div class="symbol" id="s3"><img src="main_mask.png"></div>
+  <div class="symbol" id="s4"><img src="spirale_mask.png"></div>
+  <div class="symbol" id="s5"><img src="sablier_mask.png"></div>
+ </div>
+ <div class="order" id="order"><img src="ordre_mask.png"></div>
+ <div id="caption"></div>
+ <div id="finalLogo"></div>
+ <div id="status"><div class="statusbox">
+   <div class="row"><span>MATRICULE</span><span id="mat">OCI-26-XXXXX</span></div>
+   <div class="row"><span>STATUT</span><span id="stat">CANDIDAT</span></div>
+   <div class="row"><span>ACCRÉDITATION</span><span id="acc">—</span></div>
+   <div class="row"><span>DIVISION</span><span id="division">—</span></div>
+ </div></div>
+ <div class="flash" id="flash"></div>
+<div id="vignette"></div></div>
+
+<div id="intro">
+ <div class="panel">
+  <div class="kicker">MODULE AUTONOME // PRODUCTION</div>
+  <h1>D000 — CÉRÉMONIE D'INITIATION</h1>
+  <p>V0.2 — mise en scène avancée des Cinq Ombres et convergence. Aucun son. Les emblèmes restent monochromes jusqu'à l'affectation finale.</p>
+  <div class="controls">
+   <select id="choice">
+    <option value="oeil">ŒIL FENDU</option>
+    <option value="flamme">FLAMME INVERSÉE</option>
+    <option value="main">MAIN CASSÉE</option>
+    <option value="spirale">SPIRALE D'OS</option>
+    <option value="sablier">SABLIER NOIR</option>
+   </select>
+   <button id="launch">LANCER LA CÉRÉMONIE</button>
+  </div>
+ </div>
+</div>
+<div id="testbar"><button onclick="restart()">REJOUER</button><button onclick="skipToFinal()">AFFECTATION</button></div>
+
+<script>
+const divisions={
+ oeil:{name:"ŒIL FENDU",color:"#d9e8ff",img:"oeil_mask.png"},
+ flamme:{name:"FLAMME INVERSÉE",color:"#d44b45",img:"flamme_mask.png"},
+ main:{name:"MAIN CASSÉE",color:"#d5ad62",img:"main_mask.png"},
+ spirale:{name:"SPIRALE D'OS",color:"#8eaa92",img:"spirale_mask.png"},
+ sablier:{name:"SABLIER NOIR",color:"#8e74bb",img:"sablier_mask.png"}
+};
+let timers=[], selected="oeil";
+const $=id=>document.getElementById(id);
+function later(ms,fn){timers.push(setTimeout(fn,ms))}
+function clearTimers(){timers.forEach(clearTimeout);timers=[]}
+function cap(txt,ms=4200){$("caption").textContent=txt;$("caption").classList.add("show");later(ms,()=>$("caption").classList.remove("show"))}
+function reset(){
+ clearTimers();
+ ["s1","s2","s3","s4","s5"].forEach(id=>$(id).className="symbol");
+ $("order").className="order"; $("geo").style.opacity=0;$("sweep").className="";$("sealrings").className="";$("caption").className="";
+ $("status").className="";$("finalLogo").className="";$("finalLogo").innerHTML="";
+ $("stat").textContent="CANDIDAT";$("acc").textContent="—";$("division").textContent="—";
+ document.documentElement.style.setProperty("--accent","#d9d4c7");
+}
+function showSymbol(i,text){
+ const el=$("s"+i); el.classList.add("show","awake"); cap(text,3200);
+ later(5600,()=>el.classList.add("orbit"));
+}
+function ceremony(){
+ reset(); $("intro").style.display="none"; $("testbar").style.display="flex";
+ later(2200,()=>{$("geo").style.opacity=.55;$("sweep").classList.add("go")});
+ later(8000,()=>cap("DEPUIS QUE L'HOMME OBSERVE LE MONDE, IL CROIT REGARDER LA RÉALITÉ.",6500));
+ later(24000,()=>cap("IL N'EN PERÇOIT QU'UNE VERSION.",4500));
+ later(39000,()=>cap("DEPUIS DES SIÈCLES, CERTAINS ONT APPRIS À RECONNAÎTRE CE QUE D'AUTRES NE POUVAIENT VOIR.",9000));
+ later(60000,()=>showSymbol(1,"CERTAINS ONT OBSERVÉ."));
+ later(76000,()=>showSymbol(2,"CERTAINS ONT ADAPTÉ."));
+ later(91000,()=>showSymbol(3,"CERTAINS ONT ANTICIPÉ."));
+ later(107000,()=>showSymbol(4,"CERTAINS ONT PRÉSERVÉ."));
+ later(122000,()=>showSymbol(5,"CERTAINS ONT CONTENU CE QUI NE DEVAIT PAS FRANCHIR LA LIMITE."));
+ later(135000,()=>cap("SÉPARÉES, ELLES SONT CINQ.",4500));
+ later(143000,()=>{["s1","s2","s3","s4","s5"].forEach((id,k)=>later(k*160,()=>$(id).classList.add("converge")));$("sealrings").classList.add("show");});
+ later(148000,()=>cap("ENSEMBLE… ELLES SONT L'ORDRE.",5200));
+ later(151000,()=>{$("flash").classList.remove("go");void $("flash").offsetWidth;$("flash").classList.add("go");$("order").classList.add("show","reveal")});
+ later(188000,()=>{$("order").classList.remove("show");$("geo").style.opacity=.12});
+ later(194000,()=>showFinal());
+}
+function showFinal(){
+ const d=divisions[selected];
+ document.documentElement.style.setProperty("--accent",d.color);
+ $("status").classList.add("show");
+ later(1800,()=>{$("stat").textContent="INITIÉ"});
+ later(3800,()=>{$("acc").textContent="OMBRE I"});
+ later(5900,()=>{
+   $("division").textContent=d.name;$("division").style.color=d.color;
+   $("finalLogo").innerHTML=`<img src="${d.img}" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 14px ${d.color})">`;
+   $("finalLogo").classList.add("show");
+ });
+ later(9000,()=>cap("AUJOURD'HUI, CETTE RESPONSABILITÉ DEVIENT ÉGALEMENT LA VÔTRE.",6500));
+ later(17500,()=>cap("BIENVENUE PARMI LES CINQ OMBRES… INITIÉ.",8000));
+}
+function restart(){reset();$("intro").style.display="flex";$("testbar").style.display="none"}
+function skipToFinal(){reset();$("intro").style.display="none";$("testbar").style.display="flex";showFinal()}
+$("launch").onclick=()=>{selected=$("choice").value;ceremony()};
+</script>
+</body></html>
