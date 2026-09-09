@@ -842,6 +842,55 @@ button:hover{border-color:#aaa}
   transition:none!important;
 }
 
+
+/* V1.3.6 — anneaux plus organiques et lisibles */
+#sealrings .ring:nth-child(1){
+  animation:ringBreathe136 7.2s ease-in-out infinite alternate!important;
+}
+#sealrings .ring:nth-child(2){
+  animation:ringOrbitA136 10.8s ease-in-out infinite!important;
+}
+#sealrings .ring:nth-child(3){
+  animation:ringOrbitB136 13.6s ease-in-out infinite!important;
+}
+#sealrings .ring:nth-child(4){
+  animation:ringOuter136 17.5s ease-in-out infinite!important;
+}
+#sealrings .ring:nth-child(5){
+  animation:ringOuter2136 21s ease-in-out infinite!important;
+}
+@keyframes ringBreathe136{
+  0%{transform:scale(.955);opacity:.64}
+  100%{transform:scale(1.045);opacity:.90}
+}
+@keyframes ringOrbitA136{
+  0%,100%{transform:rotate(-2.4deg) scaleX(1.025) scaleY(.975)}
+  50%{transform:rotate(2.8deg) scaleX(.975) scaleY(1.025)}
+}
+@keyframes ringOrbitB136{
+  0%,100%{transform:rotate(2.8deg) scale(.965)}
+  48%{transform:rotate(-3.2deg) scale(1.04)}
+  72%{transform:rotate(-.8deg) scale(1.012)}
+}
+@keyframes ringOuter136{
+  0%,100%{transform:scale(.98) rotate(-1.5deg);opacity:.27}
+  50%{transform:scale(1.045) rotate(3deg);opacity:.43}
+}
+@keyframes ringOuter2136{
+  0%,100%{transform:scale(1.035) rotate(2deg);opacity:.16}
+  50%{transform:scale(.975) rotate(-3.2deg);opacity:.28}
+}
+
+/* VERROU NOIR ABSOLU : aucune règle d'anneau ne peut gagner après la fin. */
+html body #sealrings.ceremony-ended,
+html body #order.ceremony-ended{
+  display:none!important;
+  opacity:0!important;
+  visibility:hidden!important;
+  animation:none!important;
+  transition:none!important;
+}
+
 </style>
 </head>
 <body>
@@ -1049,6 +1098,14 @@ function buildStars(){
 buildStars();
 
 function reset(){
+ const __ord=$("order"),__rng=$("sealrings");
+ [__ord,__rng].forEach(el=>{
+   el.classList.remove("ceremony-ended");
+   el.style.removeProperty("display");
+   el.style.removeProperty("visibility");
+   el.style.removeProperty("opacity");
+ });
+
  const _o=$("order"),_r=$("sealrings");
  _r.classList.remove("ceremony-ended"); _o.classList.remove("ceremony-ended");
  _r.style.visibility="";
@@ -1149,14 +1206,17 @@ $("order").classList.add("show","reveal");$("geo").style.opacity=.14;
    /* Verrouillage définitif de fin : aucune animation ultérieure ne peut
       faire réapparaître les anneaux ou le logo. */
    const lockFinalVisual=()=>{
-     ringsEl.classList.add("ceremony-ended"); orderEl.classList.add("ceremony-ended");
-     ringsEl.style.setProperty("opacity","0","important");
-     ringsEl.style.setProperty("visibility","hidden","important");
-     orderEl.style.setProperty("opacity","0","important");
-     orderEl.style.setProperty("visibility","hidden","important");
+     /* Le fondu est terminé : on détruit tous les états animés AVANT le noir. */
+     [ringsEl,orderEl].forEach(el=>{
+       if(el.getAnimations) el.getAnimations({subtree:true}).forEach(a=>a.cancel());
+       el.classList.add("ceremony-ended");
+       el.style.setProperty("opacity","0","important");
+       el.style.setProperty("visibility","hidden","important");
+       el.style.setProperty("display","none","important");
+     });
    };
    /* Verrou avant toute transition d'écran suivante. */
-   setTimeout(lockFinalVisual,6950);
+   setTimeout(lockFinalVisual,6750);
  });
 
  // Fin musicale ~209.7 s : noir absolu, puis respiration.
