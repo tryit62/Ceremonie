@@ -794,6 +794,43 @@ button:hover{border-color:#aaa}
 }
 #orderFinalGroup.depart{opacity:1!important;transition:none!important}
 
+
+/* V1.3.4 — corrections ciblées */
+
+/* Les anneaux entourent le logo sans jamais le traverser.
+   Le système est plus grand que l'emblème, avec un vrai espace négatif. */
+#sealrings{
+  width:min(78vw,78vh)!important;
+  height:min(78vw,78vh)!important;
+  left:50%!important;
+  top:49%!important;
+}
+#sealrings .ring:nth-child(1){width:82%!important;height:82%!important;margin-left:-41%!important;margin-top:-41%!important}
+#sealrings .ring:nth-child(2){width:88%!important;height:88%!important;margin-left:-44%!important;margin-top:-44%!important}
+#sealrings .ring:nth-child(3){width:94%!important;height:94%!important;margin-left:-47%!important;margin-top:-47%!important}
+#sealrings .ring:nth-child(4){width:100%!important;height:100%!important;margin-left:-50%!important;margin-top:-50%!important}
+#sealrings .ring:nth-child(5){width:106%!important;height:106%!important;margin-left:-53%!important;margin-top:-53%!important}
+
+/* Pas de flash/sursaut d'opacité à l'arrivée :
+   la naissance ne modifie plus brightness/opacity du système. */
+#sealrings.show{
+  opacity:1!important;
+  animation:ringSystemBirthStable 3.8s cubic-bezier(.16,.75,.22,1) both!important;
+}
+@keyframes ringSystemBirthStable{
+  0%{transform:translate(-50%,-50%) scale(.78)}
+  28%{transform:translate(-50%,-50%) scale(1.035)}
+  62%{transform:translate(-50%,-50%) scale(.992)}
+  100%{transform:translate(-50%,-50%) scale(1)}
+}
+
+/* Une fois la sortie commencée, impossible de réafficher les anneaux. */
+#sealrings.ceremony-ended{
+  opacity:0!important;
+  visibility:hidden!important;
+  animation:none!important;
+}
+
 </style>
 </head>
 <body>
@@ -1001,6 +1038,13 @@ function buildStars(){
 buildStars();
 
 function reset(){
+ const _o=$("order"),_r=$("sealrings");
+ _r.classList.remove("ceremony-ended");
+ _r.style.visibility="";
+ _r.style.opacity="";
+ _o.style.visibility="";
+ _o.style.opacity="";
+
  ["order","sealrings"].forEach(id=>{
    const el=$(id);
    if(el && el.getAnimations) el.getAnimations().forEach(a=>a.cancel());
@@ -1090,6 +1134,16 @@ $("order").classList.add("show","reveal");$("geo").style.opacity=.14;
      ],
      {duration:7200,easing:"cubic-bezier(.32,0,.22,1)",fill:"forwards"}
    );
+
+   /* Verrouillage définitif de fin : aucune animation ultérieure ne peut
+      faire réapparaître les anneaux ou le logo. */
+   setTimeout(()=>{
+     ringsEl.classList.add("ceremony-ended");
+     ringsEl.style.opacity="0";
+     ringsEl.style.visibility="hidden";
+     orderEl.style.opacity="0";
+     orderEl.style.visibility="hidden";
+   },7350);
  });
 
  // Fin musicale ~209.7 s : noir absolu, puis respiration.
@@ -1145,3 +1199,4 @@ function testAudio(){
 
 </script>
 </body></html>
+<!-- V1.3.4: no asset changes -->
