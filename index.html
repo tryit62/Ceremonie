@@ -831,6 +831,17 @@ button:hover{border-color:#aaa}
   animation:none!important;
 }
 
+
+/* V1.3.5 — garde anti-réapparition finale */
+#sealrings.ceremony-ended,
+#order.ceremony-ended{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  animation:none!important;
+  transition:none!important;
+}
+
 </style>
 </head>
 <body>
@@ -1039,7 +1050,7 @@ buildStars();
 
 function reset(){
  const _o=$("order"),_r=$("sealrings");
- _r.classList.remove("ceremony-ended");
+ _r.classList.remove("ceremony-ended"); _o.classList.remove("ceremony-ended");
  _r.style.visibility="";
  _r.style.opacity="";
  _o.style.visibility="";
@@ -1137,13 +1148,15 @@ $("order").classList.add("show","reveal");$("geo").style.opacity=.14;
 
    /* Verrouillage définitif de fin : aucune animation ultérieure ne peut
       faire réapparaître les anneaux ou le logo. */
-   setTimeout(()=>{
-     ringsEl.classList.add("ceremony-ended");
-     ringsEl.style.opacity="0";
-     ringsEl.style.visibility="hidden";
-     orderEl.style.opacity="0";
-     orderEl.style.visibility="hidden";
-   },7350);
+   const lockFinalVisual=()=>{
+     ringsEl.classList.add("ceremony-ended"); orderEl.classList.add("ceremony-ended");
+     ringsEl.style.setProperty("opacity","0","important");
+     ringsEl.style.setProperty("visibility","hidden","important");
+     orderEl.style.setProperty("opacity","0","important");
+     orderEl.style.setProperty("visibility","hidden","important");
+   };
+   /* Verrou avant toute transition d'écran suivante. */
+   setTimeout(lockFinalVisual,6950);
  });
 
  // Fin musicale ~209.7 s : noir absolu, puis respiration.
