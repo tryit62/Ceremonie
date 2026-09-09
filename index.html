@@ -771,6 +771,29 @@ button:hover{border-color:#aaa}
   transition:opacity 7s cubic-bezier(.32,0,.22,1)!important;
 }
 
+
+/* V1.3.3 — Anneaux réellement serrés autour de l'emblème */
+#sealrings{
+  width:min(58vw,58vh)!important;
+  aspect-ratio:1!important;
+  left:50%!important;
+  top:49%!important;
+}
+#sealrings .ring:nth-child(1){width:70%!important;height:70%!important;margin-left:-35%!important;margin-top:-35%!important}
+#sealrings .ring:nth-child(2){width:79%!important;height:79%!important;margin-left:-39.5%!important;margin-top:-39.5%!important}
+#sealrings .ring:nth-child(3){width:88%!important;height:88%!important;margin-left:-44%!important;margin-top:-44%!important}
+#sealrings .ring:nth-child(4){width:97%!important;height:97%!important;margin-left:-48.5%!important;margin-top:-48.5%!important}
+#sealrings .ring:nth-child(5){width:106%!important;height:106%!important;margin-left:-53%!important;margin-top:-53%!important}
+
+/* Pas de transition CSS de sortie sur les enfants :
+   Safari/iPad ne peut plus sauter directement à opacity:0. */
+#order.order-depart,#sealrings.order-depart{
+  opacity:inherit!important;
+  animation:none!important;
+  transition:none!important;
+}
+#orderFinalGroup.depart{opacity:1!important;transition:none!important}
+
 </style>
 </head>
 <body>
@@ -978,6 +1001,10 @@ function buildStars(){
 buildStars();
 
 function reset(){
+ ["order","sealrings"].forEach(id=>{
+   const el=$(id);
+   if(el && el.getAnimations) el.getAnimations().forEach(a=>a.cancel());
+ });
  $("orderFinalGroup").classList.remove("depart");
  $("order").classList.remove("final-fade","order-depart");$("sealrings").classList.remove("final-fade","order-depart","show");$("sealrings").style.opacity="0";$("sealrings").style.transition="";
  energy.clear(); $("starfield").className="";
@@ -1031,11 +1058,38 @@ $("order").classList.add("show","reveal");$("geo").style.opacity=.14;
  // L'emblème reste seul pendant tout l'apogée, puis commence sa disparition
  // sur la vraie redescente finale du morceau.
  later(198000,()=>{
-   $("orderFinalGroup").classList.add("depart");
    $("geo").style.opacity=.08;
-   $("order").classList.remove("exit");
-   $("order").classList.add("order-depart");
-   $("sealrings").classList.add("order-depart");
+
+   /* Fondu piloté image par image par le navigateur.
+      On part de l'état ACTUEL, sans ajouter une classe qui impose opacity:0. */
+   const orderEl=$("order");
+   const ringsEl=$("sealrings");
+
+   orderEl.classList.remove("order-depart","final-fade","exit");
+   ringsEl.classList.remove("order-depart","final-fade");
+
+   const orderOpacity=parseFloat(getComputedStyle(orderEl).opacity)||1;
+   const ringsOpacity=parseFloat(getComputedStyle(ringsEl).opacity)||1;
+
+   orderEl.animate(
+     [
+       {opacity:orderOpacity,filter:"blur(0px) brightness(1)",transform:"translate(-50%,-50%) scale(1)"},
+       {opacity:orderOpacity*.72,offset:.38},
+       {opacity:orderOpacity*.32,filter:"blur(.5px) brightness(.88)",offset:.72},
+       {opacity:0,filter:"blur(2px) brightness(.72)",transform:"translate(-50%,-50%) scale(.975)"}
+     ],
+     {duration:7000,easing:"cubic-bezier(.32,0,.22,1)",fill:"forwards"}
+   );
+
+   ringsEl.animate(
+     [
+       {opacity:ringsOpacity,filter:"blur(0px)",transform:"translate(-50%,-50%) scale(1)"},
+       {opacity:ringsOpacity*.68,offset:.42},
+       {opacity:ringsOpacity*.28,offset:.76},
+       {opacity:0,filter:"blur(1.6px)",transform:"translate(-50%,-50%) scale(1.045)"}
+     ],
+     {duration:7200,easing:"cubic-bezier(.32,0,.22,1)",fill:"forwards"}
+   );
  });
 
  // Fin musicale ~209.7 s : noir absolu, puis respiration.
