@@ -505,6 +505,22 @@ button:hover{border-color:#aaa}
 #energyCanvas.on{opacity:.72}
 #geo{display:none!important} /* abandon complet des anciens cercles/cartes */
 
+
+/* V1.2.2 — FONDU FINAL
+   L'emblème de l'Ordre et ses cercles quittent l'écran comme une seule image. */
+#order.final-fade{
+ opacity:0!important;
+ filter:blur(1.5px) brightness(.82)!important;
+ transform:translate(-50%,-50%) scale(.985)!important;
+ transition:opacity 5.8s ease,filter 5.8s ease,transform 6.2s ease!important;
+}
+#sealrings.final-fade{
+ opacity:0!important;
+ filter:blur(1.2px)!important;
+ transform:translate(-50%,-50%) scale(1.035)!important;
+ transition:opacity 6.4s ease,filter 6.4s ease,transform 6.8s ease!important;
+}
+
 </style>
 </head>
 <body>
@@ -694,6 +710,7 @@ function buildStars(){
 buildStars();
 
 function reset(){
+ $("order").classList.remove("final-fade");$("sealrings").classList.remove("final-fade");
  energy.clear(); $("starfield").className="";
  clearTimers();
  ["s1","s2","s3","s4","s5"].forEach(id=>$(id).className="symbol");
@@ -737,7 +754,9 @@ function ceremony(){
  // Partie III : apogée. Plus aucune narration.
  later(151000,()=>{
    $("flash").classList.remove("go"); void $("flash").offsetWidth; $("flash").classList.add("go");
-   energy.burst();$("order").classList.add("show","reveal");$("geo").style.opacity=.14;
+   energy.burst();
+setTimeout(()=>{$("sealrings").classList.add("show")},900);
+$("order").classList.add("show","reveal");$("geo").style.opacity=.14;
  });
 
  // L'emblème reste seul pendant tout l'apogée, puis commence sa disparition
