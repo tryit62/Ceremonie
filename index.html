@@ -891,6 +891,72 @@ html body #order.ceremony-ended{
   transition:none!important;
 }
 
+
+/* V1.4.0 — OSCILLATION 3D DES CINQ ANNEAUX
+   Le logo reste fixe. Chaque anneau bascule dans l'espace avec une phase différente. */
+#sealrings{
+  perspective:900px!important;
+  transform-style:preserve-3d!important;
+}
+#sealrings .ring{
+  transform-style:preserve-3d!important;
+  backface-visibility:visible!important;
+  will-change:transform,opacity!important;
+}
+#sealrings .ring:nth-child(1){
+  animation:ring3D1 8.8s ease-in-out infinite alternate!important;
+}
+#sealrings .ring:nth-child(2){
+  animation:ring3D2 11.4s ease-in-out -2.1s infinite alternate!important;
+}
+#sealrings .ring:nth-child(3){
+  animation:ring3D3 13.7s ease-in-out -5.2s infinite alternate!important;
+}
+#sealrings .ring:nth-child(4){
+  animation:ring3D4 16.2s ease-in-out -3.4s infinite alternate!important;
+}
+#sealrings .ring:nth-child(5){
+  animation:ring3D5 19.3s ease-in-out -7.1s infinite alternate!important;
+}
+
+@keyframes ring3D1{
+  0%   {transform:rotateX(12deg) rotateY(-8deg) rotateZ(-1deg) scale(.995)}
+  50%  {transform:rotateX(-10deg) rotateY(10deg) rotateZ(1.4deg) scale(1.012)}
+  100% {transform:rotateX(9deg) rotateY(6deg) rotateZ(-.7deg) scale(.998)}
+}
+@keyframes ring3D2{
+  0%   {transform:rotateX(-16deg) rotateY(7deg) rotateZ(1.2deg) scale(1.005)}
+  48%  {transform:rotateX(11deg) rotateY(-12deg) rotateZ(-1.6deg) scale(.992)}
+  100% {transform:rotateX(-8deg) rotateY(10deg) rotateZ(.8deg) scale(1.008)}
+}
+@keyframes ring3D3{
+  0%   {transform:rotateX(9deg) rotateY(15deg) rotateZ(-1.5deg) scale(.994)}
+  52%  {transform:rotateX(-14deg) rotateY(-7deg) rotateZ(1.8deg) scale(1.01)}
+  100% {transform:rotateX(12deg) rotateY(-10deg) rotateZ(-.6deg) scale(.997)}
+}
+@keyframes ring3D4{
+  0%   {transform:rotateX(-11deg) rotateY(-13deg) rotateZ(1deg) scale(1.004)}
+  45%  {transform:rotateX(15deg) rotateY(8deg) rotateZ(-1.3deg) scale(.996)}
+  100% {transform:rotateX(-7deg) rotateY(12deg) rotateZ(.5deg) scale(1.006)}
+}
+@keyframes ring3D5{
+  0%   {transform:rotateX(14deg) rotateY(-10deg) rotateZ(-.8deg) scale(.998)}
+  50%  {transform:rotateX(-9deg) rotateY(14deg) rotateZ(1.1deg) scale(1.008)}
+  100% {transform:rotateX(7deg) rotateY(-13deg) rotateZ(-.4deg) scale(.995)}
+}
+
+/* Les impulsions lumineuses restent attachées à la surface de leur anneau. */
+#sealrings .ring::after{transform-style:preserve-3d}
+
+/* Pendant la sortie finale, aucun mouvement ne peut contrarier le fondu/noir validé. */
+#sealrings.ceremony-ended .ring,
+#sealrings.ceremony-ended .ring::after{
+  animation:none!important;
+}
+@media (prefers-reduced-motion:reduce){
+  #sealrings .ring{animation:none!important}
+}
+
 </style>
 </head>
 <body>
